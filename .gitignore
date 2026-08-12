@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+.env
+output/
+demo_run_mock/*.docx

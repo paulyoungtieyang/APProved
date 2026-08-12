@@ -1,0 +1,8 @@
+{
+  "device_name": "NeuroFlex Cervical Stabilization Plate",
+  "manufacturer": "Helios Medical GmbH",
+  "intended_purpose": "A titanium implant intended to provide stabilization of the cervical spine following trauma or degenerative disc disease, for use by qualified spinal surgeons in a hospital setting.",
+  "device_description": "Implantable titanium alloy (Ti-6Al-4V ELI) plate with locking screw mechanism, available in 4 sizes. Single-use, sterile, supplied with a dedicated surgical instrument set. Class IIb active implantable-adjacent device under EU MDR Annex VIII Rule 8.",
+  "clinical_data_summary": "Pivotal clinical study (n=214, 12-month follow-up, multi-center EU): primary endpoint of fusion rate at 12 months met (91.4% vs. 78.2% performance goal, p<0.001). Secondary endpoints: reduction in neck disability index (NDI), reoperation rate 3.7%, no unanticipated adverse device effects reported. Equivalence data from predicate device (CerviLock II, CE-marked 2016) used to supplement pre-market clinical evidence per MDCG 2020-5.",
+  "risk_summary": "Risk management file per ISO 14971 identifies 34 hazards across mechanical, biological, and use-related categories. All residual risks rated acceptable per company risk acceptability matrix after mitigation (design controls, IFU warnings, surgeon training program). No risks in the 'unacceptable' or 'ALARP-review-required' bands remain open."
+}

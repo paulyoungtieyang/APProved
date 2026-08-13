@@ -1,9 +1,0 @@
-{
-  "consent_to_audit_trail": true,
-  "device_name": "CardioRelax 5mg Tablets",
-  "manufacturer": "Solenta Pharma B.V.",
-  "intended_purpose": "An oral antihypertensive tablet indicated for the treatment of mild to moderate essential hypertension in adults.",
-  "device_description": "Immediate-release film-coated tablet, 5 mg active pharmaceutical ingredient (amlodipine besylate equivalent), 30-tablet blister pack, oral administration once daily.",
-  "clinical_data_summary": "Phase III RCT (n=612) demonstrated a statistically significant reduction in systolic blood pressure versus placebo at 12 weeks (p<0.001); standard pharmacokinetic/pharmacodynamic profile established in Phase I.",
-  "risk_summary": "Standard drug safety profile per pharmacovigilance file; common adverse events include peripheral oedema and headache, consistent with the calcium-channel-blocker class."
-}

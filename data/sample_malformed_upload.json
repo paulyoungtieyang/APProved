@@ -1,0 +1,5 @@
+{
+  "device_name": "Broken Upload Demo",
+  "manufacturer": "Test Co",
+  "intended_purpose": "A surgical implant device, uploaded here to test the data-quality gate's not-parsable branch.",
+}

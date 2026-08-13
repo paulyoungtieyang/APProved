@@ -1,0 +1,24 @@
+{
+  "consent_to_audit_trail": true,
+  "device_name": "CardioSync Implantable Pulse Generator",
+  "manufacturer": "Meridian CardioTech GmbH",
+  "intended_purpose": "An implantable pulse generator intended to deliver electrical pacing therapy to sustain an adequate heart rhythm in patients with symptomatic bradycardia, implanted subcutaneously with transvenous leads to the myocardium.",
+  "device_description": "Hermetically sealed titanium-housed implantable pulse generator with a 10-year battery life, connected to the heart via transvenous pacing leads, programmable via an external clinician programmer. Directly sustains a vital physiological function and is intended for long-term implantation.",
+  "clinical_data_summary": "Pivotal clinical study (n=180, 24-month follow-up): primary endpoint of appropriate pacing capture met in 98.9% of patients; lead dislodgement rate 1.1%; no unanticipated device-related serious adverse events.",
+  "risk_summary": "Risk management file per ISO 14971 identifies 41 hazards across electrical, mechanical, and biological categories, including hazards specific to long-term active implantation and life-sustaining failure modes. All residual risks rated acceptable after mitigation.",
+  "clinical_trial_data": {
+    "trial_name": "Pivotal study, n=180 (representative 10-patient sample shown here)",
+    "patients": [
+      {"patient_id": "P01", "implant_duration_days": 730, "device_related_serious_adverse_event": "no", "lead_dislodgement": "no", "battery_performance_nominal": "yes", "follow_up_completed": "yes"},
+      {"patient_id": "P02", "implant_duration_days": 730, "device_related_serious_adverse_event": "no", "lead_dislodgement": "no", "battery_performance_nominal": "yes", "follow_up_completed": "yes"},
+      {"patient_id": "P03", "implant_duration_days": 712, "device_related_serious_adverse_event": "no", "lead_dislodgement": "yes", "battery_performance_nominal": "yes", "follow_up_completed": "yes"},
+      {"patient_id": "P04", "implant_duration_days": 730, "device_related_serious_adverse_event": "no", "lead_dislodgement": "no", "battery_performance_nominal": "yes", "follow_up_completed": "yes"},
+      {"patient_id": "P05", "implant_duration_days": 730, "device_related_serious_adverse_event": "no", "lead_dislodgement": "no", "battery_performance_nominal": "yes", "follow_up_completed": "yes"},
+      {"patient_id": "P06", "implant_duration_days": 730, "device_related_serious_adverse_event": "no", "lead_dislodgement": "no", "battery_performance_nominal": "yes", "follow_up_completed": "yes"},
+      {"patient_id": "P07", "implant_duration_days": 730, "device_related_serious_adverse_event": "no", "lead_dislodgement": "no", "battery_performance_nominal": "yes", "follow_up_completed": "yes"},
+      {"patient_id": "P08", "implant_duration_days": 730, "device_related_serious_adverse_event": "no", "lead_dislodgement": "no", "battery_performance_nominal": "yes", "follow_up_completed": "yes"},
+      {"patient_id": "P09", "implant_duration_days": 730, "device_related_serious_adverse_event": "no", "lead_dislodgement": "no", "battery_performance_nominal": "yes", "follow_up_completed": "yes"},
+      {"patient_id": "P10", "implant_duration_days": 730, "device_related_serious_adverse_event": "no", "lead_dislodgement": "no", "battery_performance_nominal": "yes", "follow_up_completed": "yes"}
+    ]
+  }
+}

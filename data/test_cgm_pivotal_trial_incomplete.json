@@ -1,0 +1,24 @@
+{
+  "consent_to_audit_trail": true,
+  "device_name": "GlucoSense CGM Sensor System",
+  "manufacturer": "MedSense Diagnostics AG",
+  "intended_purpose": "A continuous glucose monitoring (CGM) system intended to measure interstitial glucose levels in adults and children with diabetes mellitus, providing real-time glucose readings and trend alerts to support diabetes self-management.",
+  "device_description": "Subcutaneous wearable glucose sensor (14-day wear, factory-calibrated) paired with a disposable applicator and a companion mobile app receiver. Measures interstitial fluid glucose via an enzymatic (glucose oxidase) electrochemical sensor, transmitting readings via Bluetooth Low Energy every 5 minutes.",
+  "clinical_data_summary": "Pivotal accuracy study (n=340, 14-day wear, home-use and clinic conditions): overall Mean Absolute Relative Difference (MARD) of 8.7% against YSI reference; consensus error grid analysis showed 99.1% of paired points in Zones A+B. Hypoglycemia detection sensitivity 92.3% at <70 mg/dL threshold. No device-related serious adverse events reported.",
+  "risk_summary": "Risk management file per ISO 14971 identifies 28 hazards across sensor accuracy, skin irritation, wireless connectivity, and use-related categories. All residual risks rated acceptable after mitigation (calibration algorithms, hypoallergenic adhesive, Bluetooth encryption, user training materials). No unacceptable residual risks remain open.",
+  "clinical_trial_data": {
+    "trial_name": "Pivotal accuracy study, n=340 (representative 10-patient sample shown here) -- several sites returned incomplete case report forms",
+    "patients": [
+      {"patient_id": "P01", "age": 34, "baseline_hba1c": 7.8, "device_mard_percent": 8.1, "hypoglycemia_events_per_month": 2, "completed_14day_wear": "yes"},
+      {"patient_id": "P02", "age": 51, "baseline_hba1c": 8.4, "device_mard_percent": null, "hypoglycemia_events_per_month": 1, "completed_14day_wear": "yes"},
+      {"patient_id": "P03", "age": 29, "baseline_hba1c": 7.1, "device_mard_percent": 7.6, "hypoglycemia_events_per_month": null, "completed_14day_wear": "yes"},
+      {"patient_id": "P04", "age": 46, "baseline_hba1c": 8.0, "device_mard_percent": null, "hypoglycemia_events_per_month": 0, "completed_14day_wear": "yes"},
+      {"patient_id": "P05", "age": 62, "baseline_hba1c": null, "device_mard_percent": 8.3, "hypoglycemia_events_per_month": 2, "completed_14day_wear": "yes"},
+      {"patient_id": "P06", "age": 38, "baseline_hba1c": 7.9, "device_mard_percent": null, "hypoglycemia_events_per_month": 1, "completed_14day_wear": "yes"},
+      {"patient_id": "P07", "age": 55, "baseline_hba1c": 8.2, "device_mard_percent": 9.2, "hypoglycemia_events_per_month": null, "completed_14day_wear": "yes"},
+      {"patient_id": "P08", "age": 41, "baseline_hba1c": 7.5, "device_mard_percent": null, "hypoglycemia_events_per_month": 1, "completed_14day_wear": "yes"},
+      {"patient_id": "P09", "age": 27, "baseline_hba1c": null, "device_mard_percent": 7.9, "hypoglycemia_events_per_month": 4, "completed_14day_wear": "yes"},
+      {"patient_id": "P10", "age": 58, "baseline_hba1c": 8.6, "device_mard_percent": 9.4, "hypoglycemia_events_per_month": 1, "completed_14day_wear": ""}
+    ]
+  }
+}

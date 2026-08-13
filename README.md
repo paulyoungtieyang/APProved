@@ -1,11 +1,13 @@
 # APProved — agentic EU MDR CE-mark drafting workflow
 
 A runnable implementation of the workflow discussed throughout this
-project: client uploads device data → agent fetches EU MDR → agent drafts
-the CE-mark technical documentation → an automated compliance check →
-one internal regulatory-expert review pass → up to 5 rounds of client
-review → final accept/decline, with a decline routing to a scheduled
-meeting instead of a dead end.
+project: client uploads device data → a consent check, a scope check, and
+a data-quality check gate the request → agent fetches EU MDR (live from
+eumdr.com by default, combined with a local reference) → agent drafts the
+CE-mark technical documentation → an automated compliance check → one
+internal regulatory-expert review pass → up to 5 rounds of client review →
+final accept/decline, with a decline routing to a scheduled meeting instead
+of a dead end.
 
 It is coded as a **workflow**, not an autonomous agent: every step is a
 fixed function call in `main.py`, not an LLM deciding its own next move.
@@ -17,10 +19,16 @@ That's a deliberate choice — see `main.py`'s docstring and the
 | File | Workflow step(s) | Pattern |
 |---|---|---|
 | `config.py` | 1-2 (client data + parameters) | — |
-| `regulation.py` | 3 (fetch the regulation) | augmented LLM / retrieval |
+| `consent_gate.py` | intake gate — reject uploads without audit-trail consent (fix 2) | deterministic checklist |
+| `scope_gate.py` | intake gate — reject non-device / pharma requests (iteration 1) | LLM-as-judge |
+| `data_quality_gate.py` | intake gate — reject unparsable uploads, missing fields, or >15% missing pivotal-trial data (iteration 2, revised by fix 3) | deterministic checklist |
+| `regulation.py` | 3 (fetch the regulation, live from eumdr.com by default — fix 1) | augmented LLM / retrieval |
 | `drafting.py` | 4 (draft the submission) | parallelization (sectioning) |
 | `judge.py` | automated gate before the human sees it | LLM-as-Judge |
 | `docx_export.py` | 5 (export to Word) | — |
+| `classification_gate.py` | intake gate — sanity-checks the declared class against the device description before any drafting (bug fix) | LLM-as-judge |
+| `classification_check.py` | shared detection + RECLASSIFY/KEEP resolution, used by both the intake gate above and inside 6-13 | deterministic + shared flow |
+| `audit_trail.py` | records every gate decision, round of feedback, redraft, and override across the whole run, in JSON and text | — |
 | `review.py` | 6-14 (expert loop, client loop, escalation) | evaluator-optimizer, human-in-the-loop |
 | `llm.py` | every LLM call goes through here | — |
 | `main.py` | orchestrates all of the above | prompt chaining + routing |
@@ -61,9 +69,107 @@ Other flags:
 python main.py --client-data path/to/your_device.json   # your own device data
 python main.py --max-client-rounds 3                     # override the 5-round cap
 python main.py --device-class III                        # EU MDR risk class
-python main.py --live-fetch                               # attempt a live regulation fetch
-                                                            # (falls back to the local reference on failure)
+python main.py --offline                                  # skip the live eumdr.com fetch,
+                                                            # local reference only (live fetch
+                                                            # is the default — see fix 1)
 ```
+
+## Intake gates
+
+Three gates run before any drafting starts, on every request, in this order:
+
+1. **Audit-trail consent** (`consent_gate.py`, fix 2) — APProved keeps an
+   audit-trail record of every submission in `document_library.json`. That
+   requires the client's consent, given at upload time via a top-level
+   `"consent_to_audit_trail": true` field. No consent, no record — this
+   gate is the only one that does *not* log anything to the document
+   library when it rejects, since logging would itself require the
+   consent that was just withheld.
+2. **Scope check** (`scope_gate.py`, iteration 1) — rejects requests that
+   aren't EU MDR medical devices at all: pharmaceuticals (drugs, biologics,
+   vaccines — these need a medicines-agency marketing authorisation, not a
+   CE mark) and anything else out of scope. An LLM-as-judge call, same
+   pattern as `judge.py`.
+3. **Data quality check** (`data_quality_gate.py`, iteration 2, revised by
+   fix 3) — rejects an upload that isn't parsable (bad JSON), is missing a
+   required intake field, or has more than 15% missing data points among
+   the individual patients in the `clinical_trial_data.patients` array
+   (the Phase III / pivotal trial dataset) — not the six narrative intake
+   fields; see the docx "Fixes" section for why that was corrected. Plain
+   Python, no model call for either check — these are deterministic, not a
+   judgment call.
+
+Every gate but the consent gate writes a respectful decline to the console
+and logs the rejection to `document_library.json` instead of silently
+stopping. Try the reject paths with the bundled fixtures:
+
+```bash
+python main.py --mock --auto-demo --client-data data/test_no_consent.json                     # consent gate rejects
+python main.py --mock --auto-demo --client-data data/sample_pharma_out_of_scope.json           # scope gate rejects
+python main.py --mock --auto-demo --client-data data/sample_poor_quality_data.json             # quality gate rejects (missing fields)
+python main.py --mock --auto-demo --client-data data/sample_malformed_upload.json              # quality gate rejects (bad JSON)
+python main.py --mock --auto-demo --client-data data/test_cgm_pivotal_trial_incomplete.json    # quality gate rejects (>15% missing pivotal-trial data)
+```
+
+## Classification discrepancy check
+
+An evaluation scenario found that if a regulatory expert or client says,
+mid-review, "this should be Class I, not Class IIb," nothing happened: the
+submission's device class is set once at the start of a run and review
+feedback only ever touched the drafted wording, never that value — so the
+review loop printed "Validated" while silently keeping the original class.
+
+`classification_check.py` now catches this: both `review.internal_expert_review()`
+and `review.client_review_loop()` scan each round of feedback for an
+explicit class mention (`Class IIb` or the equally common informal
+`Class 2b`) and, if it disagrees with `params.device_class`, stop and ask
+for an explicit instruction — `RECLASSIFY` (which updates
+`params.device_class` for the rest of the run, including every document
+header and the audit trail from that point on) or `KEEP` (which leaves it
+untouched). It never infers a reclassification from a passing mention on
+its own.
+
+That only catches a *human* raising the discrepancy, though. A follow-up
+bug hunt re-tested the original evaluation case that had never involved a
+human mentioning a class at all -- an implantable, life-sustaining device
+declared Class IIb, where nobody in the script ever raised it -- and found
+it still shipped completely unquestioned. `classification_gate.py` closes
+that from the other end: once, at intake, before any drafting starts, an
+LLM-as-judge call sanity-checks the declared class against the device's
+own description, and routes into the exact same RECLASSIFY/KEEP flow if it
+looks implausible. See "Bugs found and fixed" below for the rest of that
+round.
+
+## Bugs found and fixed
+
+A later pass went looking specifically for defects, not just open design
+questions, and found five, each verified by reproducing it rather than
+just re-reading the code:
+
+1. **The classification fix only covered half the problem** (above) --
+   `classification_gate.py` added the missing, proactive half.
+2. **Consent could be silently bypassed by a text mistake** --
+   `consent_gate.py`'s check used to treat the JSON *string* `"false"` as
+   consent given, because `bool("false")` is `True` in Python (any
+   non-empty string is truthy). Fixed: only an actual boolean or an
+   unambiguous affirmative word now counts.
+3. **Informal class phrasing was invisible** -- `classification_check.py`'s
+   regex only matched `Class IIb`, not the equally common `Class 2b`.
+   Fixed: both forms are recognized and normalized to the same canonical
+   class.
+4. **One failed Claude call could crash an entire submission** --
+   `llm.py` had no handling for a real API call failing; since drafting
+   fires several calls concurrently, one rate-limited call took the whole
+   run down with a raw SDK exception. Fixed: failures are now converted
+   into one clear, actionable `RuntimeError` (the SDK already retries
+   transient errors internally -- this doesn't duplicate that, it makes a
+   failure that gets through diagnosable instead of cryptic).
+5. **The compliance check ran sections one at a time** -- `judge.py`'s
+   `run_compliance_gate()` was a plain sequential loop, unlike drafting's
+   parallel pattern. Fixed: now one concurrent call per section, same
+   `ThreadPoolExecutor` pattern as `drafting.draft_all_sections()`.
+
+All fixtures in `data/` were re-run after these fixes with no regressions.
 
 ## What it produces
 
@@ -73,14 +179,35 @@ Everything lands in `output/`:
 - `02_expert_validated.docx` — after the internal regulatory-expert review pass
 - `03_FINAL_shipped.docx` — if the client accepts
 - `03_pending_escalation.docx` — if the client declines after 5 rounds
-- `document_library.json` — one audit-trail entry per run (device, outcome, document path, any escalation request)
+- `document_library.json` — a lightweight, one-line-per-run index (device, outcome, document path, any escalation request), including requests declined by the scope or data-quality gate — but never a request declined for lack of audit-trail consent (fix 2): there is nothing to log until consent is given
+- `audit_<device>_<timestamp>.audit.json` / `.audit.txt` — the detailed record behind each index entry: every gate decision, every round of human feedback, every redraft, every classification override (see below), each timestamped and attributed. No docx involved — plain JSON and plain text, meant to be read by an auditor or diffed by a script, not formatted for a client. `document_library.json`'s `audit_trail_json` / `audit_trail_txt` fields point to the matching pair for any given run.
+
+## Audit trail
+
+`audit_trail.py`'s `AuditTrail` accumulates one `AuditEvent` (timestamp,
+actor, event type, summary, details) per meaningful thing that happens in
+a run — a gate's verdict, a round of expert or client feedback, a redraft,
+a classification override or a decline to override, an export, the final
+outcome — and writes the whole sequence to both formats once the run ends
+(or is rejected). It starts recording only after consent is confirmed
+(`consent_gate.py`), and nothing is written at all if consent is declined,
+same principle as `document_library.json`. Try it:
+
+```bash
+python main.py --mock --auto-demo
+cat output/audit_*.audit.txt   # human-readable transcript
+```
 
 ## Extending this beyond a demo
 
 - **Regulation retrieval**: `regulation.py`'s local reference file
   (`data/mdr_reference.md`) is a condensed, accurate summary of EU MDR
   Annexes I/II/III/XIV — not a placeholder, but not the full legal text
-  either. Swap it for a real vector store over the full regulation + MDCG
+  either. Fix 1 added a live fetch from eumdr.com's updates page, combined
+  with this local reference, so the agent has visibility into recent
+  amendments and MDCG guidance rather than only a fixed snapshot — but
+  eumdr.com's homepage is a news portal, not the full regulation text.
+  Swap both for a real vector store over the full regulation + MDCG
   guidance before using this for an actual submission.
 - **Human-in-the-loop**: `review.py`'s `input()` calls are where you'd wire
   in email/Slack notifications and a real approval UI instead of a

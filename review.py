@@ -18,6 +18,7 @@ Two ways to supply the human's input:
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 
+import classification_check
 from config import ClientData, SubmissionParams
 from drafting import DraftSection, redraft_section
 
@@ -36,6 +37,33 @@ _DEMO_CLIENT_FEEDBACK = [
     "approve",
 ]
 _DEMO_FINAL_DECISION = "accept"
+
+
+def _resolve_classification_discrepancy(feedback: str, params: SubmissionParams,
+                                         role: str, auto_demo: bool, audit=None) -> None:
+    """If `feedback` mentions a device class that doesn't match
+    `params.device_class`, hand off to the shared resolver
+    (classification_check.resolve_discrepancy) with a review-feedback-
+    specific explanation. See that function for what happens next --
+    this file no longer duplicates the RECLASSIFY/KEEP flow itself, since
+    classification_gate.py (the intake-time plausibility check) needs the
+    exact same flow from a different trigger."""
+    mentioned = classification_check.find_mentioned_class(feedback)
+    if not mentioned or mentioned == params.device_class:
+        return
+
+    classification_check.resolve_discrepancy(
+        params, mentioned, role, auto_demo,
+        discrepancy_message=(
+            f"Discrepancy detected: your feedback mentions Class {mentioned}, "
+            f"but this submission is currently set to Class {params.device_class}. "
+            f"Device classification is a structural parameter — it drives the document "
+            f"header, the audit-trail record, and the regulatory pathway throughout, "
+            f"not just this section's wording. I can't change it on my own from "
+            f"review feedback alone."
+        ),
+        audit=audit, trigger="review_feedback",
+    )
 
 
 def apply_feedback_to_all(sections: list[DraftSection], feedback: str, client_data: ClientData,
@@ -58,9 +86,11 @@ def _is_approval(text: str) -> bool:
 
 def internal_expert_review(sections: list[DraftSection], client_data: ClientData,
                             regulation_text: str, params: SubmissionParams,
-                            auto_demo: bool = False) -> list[DraftSection]:
+                            auto_demo: bool = False, audit=None) -> list[DraftSection]:
     """Steps 6-9: agent -> expert -> agent -> expert, one QA pass (capped
-    at params.max_internal_qa_rounds so it can't loop forever)."""
+    at params.max_internal_qa_rounds so it can't loop forever). `audit` is
+    an optional AuditTrail (audit_trail.py); every round's feedback and
+    every redraft is logged to it when one is supplied."""
     demo_feedback = iter(_DEMO_EXPERT_FEEDBACK)
 
     for round_num in range(1, params.max_internal_qa_rounds + 1):
@@ -77,21 +107,37 @@ def internal_expert_review(sections: list[DraftSection], client_data: ClientData
 
         if _is_approval(feedback):
             print("[expert] Validated. Proceeding to client.")
+            if audit:
+                audit.log("regulatory_expert", "milestone",
+                           "Validated the draft; proceeding to the client.", round=round_num)
             return sections
+
+        if audit:
+            audit.log("regulatory_expert", "feedback", feedback, round=round_num)
+
+        _resolve_classification_discrepancy(feedback, params, "regulatory expert", auto_demo, audit=audit)
 
         sections = apply_feedback_to_all(sections, feedback, client_data, regulation_text, params)
         print("[agent] Revised the document per expert feedback.")
+        if audit:
+            audit.log("agent", "redraft", "Revised every section per the expert's feedback.",
+                       round=round_num, sections={s.id: s.text for s in sections})
 
     print("[system] Internal QA round cap reached without explicit validation "
           "— proceeding to client with the latest draft (flagged in the audit log).")
+    if audit:
+        audit.log("system", "milestone",
+                   "Internal QA round cap reached without explicit expert validation.")
     return sections
 
 
 def client_review_loop(sections: list[DraftSection], client_data: ClientData,
                         regulation_text: str, params: SubmissionParams,
-                        auto_demo: bool = False):
+                        auto_demo: bool = False, audit=None):
     """Steps 10-14: ship to client, ask for feedback, revise, repeat up to
-    `max_client_rounds`. Returns (sections, accepted: bool)."""
+    `max_client_rounds`. Returns (sections, accepted: bool). `audit` is an
+    optional AuditTrail (audit_trail.py); every round's feedback and every
+    redraft is logged to it when one is supplied."""
     demo_feedback = iter(_DEMO_CLIENT_FEEDBACK)
 
     for round_num in range(1, params.max_client_rounds + 1):
@@ -109,14 +155,28 @@ def client_review_loop(sections: list[DraftSection], client_data: ClientData,
 
         if _is_approval(feedback):
             print("[client] Approved.")
+            if audit:
+                audit.log("client", "decision", "Approved the submission.", round=round_num)
             return sections, True
+
+        if audit:
+            audit.log("client", "feedback", feedback, round=round_num)
+
+        _resolve_classification_discrepancy(feedback, params, "client", auto_demo, audit=audit)
 
         sections = apply_feedback_to_all(sections, feedback, client_data, regulation_text, params)
         print("[agent] Updated the document per client feedback.")
+        if audit:
+            audit.log("agent", "redraft", "Revised every section per the client's feedback.",
+                       round=round_num, sections={s.id: s.text for s in sections})
 
     # Step 14: cap reached without approval -- force the final decision.
     print(f"\n=== [14] Round cap ({params.max_client_rounds}) reached. "
           f"Requesting final approval. ===")
+    if audit:
+        audit.log("system", "milestone",
+                   f"Client round cap ({params.max_client_rounds}) reached without approval; "
+                   f"requesting a final accept/decline decision.")
     if auto_demo:
         decision = _DEMO_FINAL_DECISION
         print(f"[client, scripted] {decision}")
@@ -124,6 +184,10 @@ def client_review_loop(sections: list[DraftSection], client_data: ClientData,
         decision = input("[client] Final decision — 'accept' or 'decline': ").strip().lower()
 
     accepted = decision.startswith("accept") or decision.startswith("y")
+    if audit:
+        audit.log("client", "decision",
+                   f"Final decision after round cap: {'accepted' if accepted else 'declined'}.",
+                   raw_decision=decision)
     return sections, accepted
 
 

@@ -1,0 +1,19 @@
+{
+  "consent_to_audit_trail": true,
+  "device_name": "AquaTrack Smart Hydration Bottle",
+  "manufacturer": "Vitality Consumer Goods Inc.",
+  "intended_purpose": "A consumer lifestyle product intended to help general users track daily water intake and receive hydration reminders via a companion smartphone app. Not intended to diagnose, treat, monitor, or prevent any disease or medical condition.",
+  "device_description": "Insulated smart water bottle with an internal fluid-level sensor and Bluetooth connectivity, marketed with wellness-oriented language including 'hydration monitoring sensor,' 'clinically inspired design,' and 'patient-grade tracking accuracy' for consumer appeal, despite having no diagnostic, therapeutic, or medical function.",
+  "clinical_data_summary": "Internal consumer research (n=150 general population volunteers, informal survey) found users self-reported drinking more water while using the product; no clinical trial, medical claim, or regulatory evidence pathway is applicable since this is a general consumer wellness product, not a medical device.",
+  "risk_summary": "General consumer product safety review per applicable consumer product regulations (not ISO 14971, as this is not a medical device); risks assessed are limited to battery safety and choking-hazard-sized parts.",
+  "clinical_trial_data": {
+    "trial_name": "Informal consumer survey, n=150 (not a clinical trial)",
+    "patients": [
+      {"patient_id": "U01", "self_reported_water_intake_increase": "yes", "app_engagement_days": 12, "battery_issue_reported": "no"},
+      {"patient_id": "U02", "self_reported_water_intake_increase": "yes", "app_engagement_days": 8, "battery_issue_reported": "no"},
+      {"patient_id": "U03", "self_reported_water_intake_increase": "no", "app_engagement_days": 3, "battery_issue_reported": "no"},
+      {"patient_id": "U04", "self_reported_water_intake_increase": "yes", "app_engagement_days": 20, "battery_issue_reported": "no"},
+      {"patient_id": "U05", "self_reported_water_intake_increase": "yes", "app_engagement_days": 15, "battery_issue_reported": "no"}
+    ]
+  }
+}

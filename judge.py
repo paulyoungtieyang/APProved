@@ -12,6 +12,7 @@ LLM call just to interpret the judge's own output.
 """
 
 import re
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 
 import llm
@@ -51,4 +52,14 @@ def check_section(section: DraftSection, params: SubmissionParams) -> JudgeResul
 
 
 def run_compliance_gate(sections: list[DraftSection], params: SubmissionParams) -> list[JudgeResult]:
-    return [check_section(s, params) for s in sections]
+    """Bug fix: this used to score every section one at a time, unlike
+    drafting.py's parallel sectioning -- inconsistent with the rest of the
+    pipeline's stated architecture and up to 6x slower than necessary
+    against a live API for no reason. Now runs one concurrent call per
+    section, same ThreadPoolExecutor pattern as draft_all_sections()."""
+    with ThreadPoolExecutor(max_workers=len(sections)) as pool:
+        futures = [pool.submit(check_section, s, params) for s in sections]
+        results = [f.result() for f in futures]
+    order = {s.id: i for i, s in enumerate(sections)}
+    results.sort(key=lambda r: order[r.section_id])
+    return results

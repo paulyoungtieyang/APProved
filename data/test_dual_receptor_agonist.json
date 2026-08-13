@@ -1,0 +1,9 @@
+{
+  "consent_to_audit_trail": true,
+  "device_name": "GlucoBalance Dual-Agonist Injection 5mg/0.5mL",
+  "manufacturer": "Corvantis Therapeutics S.A.",
+  "intended_purpose": "A once-weekly subcutaneous injection indicated as an adjunct to diet and exercise for glycemic control in adults with type 2 diabetes mellitus.",
+  "device_description": "Prefilled single-patient-use injection pen delivering a GIP/GLP-1 dual-receptor agonist peptide, 5 mg per 0.5 mL, subcutaneous injection into the abdomen, thigh, or upper arm once weekly. Active pharmaceutical ingredient is a synthetic 39-amino-acid peptide analog.",
+  "clinical_data_summary": "Phase III trial (n=938, 40-week treatment period) demonstrated a mean HbA1c reduction of 2.1 percentage points versus placebo (p<0.001) and a mean body weight reduction of 11.4%. Pharmacokinetic profile shows a terminal half-life of approximately 5 days, supporting once-weekly dosing.",
+  "risk_summary": "Standard drug safety profile per pharmacovigilance file; most common adverse events are gastrointestinal (nausea, diarrhea, decreased appetite), consistent with the incretin dual-agonist class. Boxed warning under evaluation for thyroid C-cell tumor risk based on rodent studies."
+}

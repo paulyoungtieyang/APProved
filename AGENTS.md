@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Codex (Codex.ai/code) when working with code in this repository.
 
 ## What this is
 
@@ -26,7 +26,7 @@ the client loop end to end with scripted responses):
 python main.py --mock --auto-demo
 ```
 
-Run with real Claude calls but still-scripted expert/client responses (needs `ANTHROPIC_API_KEY`):
+Run with real Codex calls but still-scripted expert/client responses (needs `ANTHROPIC_API_KEY`):
 ```
 python main.py --auto-demo
 ```
@@ -67,7 +67,7 @@ docstring): every pipeline step is a fixed function call in `main.py`'s
 made because a CE-mark submission needs to be predictable and auditable,
 not self-directed.
 
-- **`llm.py` is the single choke point for every Claude call.** Every other
+- **`llm.py` is the single choke point for every Codex call.** Every other
   module calls `llm.complete(system, user)` instead of importing
   `anthropic` directly, and it's the only file that imports `anthropic`
   (lazily, inside the function). `llm.set_mock(True)` swaps in a

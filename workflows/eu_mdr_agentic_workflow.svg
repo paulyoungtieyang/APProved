@@ -1,0 +1,129 @@
+<svg viewBox="0 0 880 1080" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" role="img" aria-labelledby="title desc">
+  <title id="title">EU MDR CE-Mark Agentic Medical Writing Workflow</title>
+  <desc id="desc">Client uploads data and selects EU MDR as the regulation. The agent fetches the regulation, drafts the CE-mark submission and exports it to Word. An internal regulatory expert reviews it once. Then the client and agent iterate up to five rounds. The agent finally asks for approval: acceptance ships the document, decline schedules a meeting with the regulatory expert.</desc>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#9CA3AF"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="880" height="1080" fill="#FFFFFF"/>
+
+  <!-- Title -->
+  <text x="40" y="34" font-size="19" font-weight="700" fill="#1A1A1A">EU MDR CE-Mark — Agentic Medical Writing Workflow</text>
+
+  <!-- Legend -->
+  <text x="40" y="66" font-size="12" font-weight="700" fill="#047857">&#9679; Client</text>
+  <text x="140" y="66" font-size="12" font-weight="700" fill="#C2410C">&#9679; Agent</text>
+  <text x="240" y="66" font-size="12" font-weight="700" fill="#B91C1C">&#9679; Regulatory Expert</text>
+
+  <!-- SETUP label -->
+  <text x="40" y="92" font-size="11" font-weight="700" letter-spacing="1" fill="#9CA3AF">SETUP</text>
+
+  <!-- Setup boxes -->
+  <rect x="40" y="100" width="380" height="72" rx="10" fill="#ECFDF5" stroke="#6EE7B7"/>
+  <text x="60" y="128" font-size="14" font-weight="700" fill="#047857">1 &#183; Upload data</text>
+  <text x="60" y="148" font-size="11" fill="#6B7280">Device / clinical data,</text>
+  <text x="60" y="162" font-size="11" fill="#6B7280">closed-loop upload</text>
+
+  <rect x="460" y="100" width="380" height="72" rx="10" fill="#ECFDF5" stroke="#6EE7B7"/>
+  <text x="480" y="128" font-size="14" font-weight="700" fill="#047857">2 &#183; Set parameters</text>
+  <text x="480" y="148" font-size="11" fill="#6B7280">Regulation = EU MDR, device</text>
+  <text x="480" y="162" font-size="11" fill="#6B7280">class, CE-mark target</text>
+
+  <line x1="440" y1="172" x2="440" y2="228" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- DRAFTING label -->
+  <text x="40" y="222" font-size="11" font-weight="700" letter-spacing="1" fill="#9CA3AF">DRAFTING</text>
+
+  <!-- Drafting box -->
+  <rect x="40" y="232" width="800" height="214" rx="10" fill="#FFF7ED" stroke="#FDBA74"/>
+
+  <text x="60" y="262" font-size="14" font-weight="700" fill="#C2410C">3 &#183; Agent fetches the regulation</text>
+  <text x="60" y="280" font-size="11" fill="#6B7280">EU MDR 2017/745 Annex I (GSPR), Annex II/III</text>
+  <text x="60" y="294" font-size="11" fill="#6B7280">(technical documentation), Annex XIV (clinical</text>
+  <text x="60" y="308" font-size="11" fill="#6B7280">evaluation), plus MDCG guidance (2020-5, 2020-6)</text>
+  <line x1="60" y1="326" x2="780" y2="326" stroke="#FDE0BB" stroke-width="1"/>
+
+  <text x="60" y="348" font-size="14" font-weight="700" fill="#C2410C">4 &#183; Agent drafts the CE-mark submission</text>
+  <text x="60" y="366" font-size="11" fill="#6B7280">Technical documentation mapped clause-by-clause</text>
+  <text x="60" y="380" font-size="11" fill="#6B7280">to the GSPR checklist</text>
+  <line x1="60" y1="394" x2="780" y2="394" stroke="#FDE0BB" stroke-width="1"/>
+
+  <text x="60" y="416" font-size="14" font-weight="700" fill="#C2410C">5 &#183; Agent exports to Word (.docx)</text>
+
+  <line x1="440" y1="446" x2="440" y2="502" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- INTERNAL QA label -->
+  <text x="40" y="496" font-size="11" font-weight="700" letter-spacing="1" fill="#9CA3AF">INTERNAL QA &#8212; ONE PASS</text>
+
+  <!-- QA row box -->
+  <rect x="40" y="506" width="800" height="90" rx="10" fill="#FEF2F2" stroke="#FCA5A5"/>
+
+  <text x="75" y="538" font-size="13" font-weight="700" fill="#B91C1C">6 &#183; Agent &#8594; Expert</text>
+  <text x="75" y="556" font-size="11" fill="#6B7280">sends draft for review</text>
+
+  <text x="270" y="538" font-size="13" font-weight="700" fill="#B91C1C">7 &#183; Expert &#8594; Agent</text>
+  <text x="270" y="556" font-size="11" fill="#6B7280">suggests improvements</text>
+
+  <text x="465" y="538" font-size="13" font-weight="700" fill="#B91C1C">8 &#183; Agent revises</text>
+  <text x="465" y="556" font-size="11" fill="#6B7280">applies suggestions</text>
+
+  <text x="660" y="538" font-size="13" font-weight="700" fill="#B91C1C">9 &#183; Expert validates</text>
+  <text x="660" y="556" font-size="11" fill="#6B7280">internal sign-off</text>
+
+  <line x1="440" y1="596" x2="440" y2="652" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- CLIENT LOOP label -->
+  <text x="40" y="646" font-size="11" font-weight="700" letter-spacing="1" fill="#9CA3AF">CLIENT REVIEW LOOP &#8212; UP TO 5 ROUNDS</text>
+
+  <!-- Loop box (dashed) -->
+  <rect x="40" y="656" width="800" height="158" rx="12" fill="#ECFDF5" stroke="#6EE7B7" stroke-width="2" stroke-dasharray="6 5"/>
+
+  <!-- round badge -->
+  <rect x="738" y="644" width="76" height="24" rx="12" fill="#047857"/>
+  <text x="776" y="660" font-size="11" font-weight="700" fill="#FFFFFF" text-anchor="middle">&#215;5 max</text>
+
+  <rect x="60" y="674" width="170" height="60" rx="8" fill="#FFFFFF"/>
+  <text x="72" y="708" font-size="12.5" font-weight="700" fill="#047857">10 &#183; Ship to client</text>
+
+  <rect x="255" y="674" width="170" height="60" rx="8" fill="#FFFFFF"/>
+  <text x="267" y="708" font-size="12.5" font-weight="700" fill="#047857">11 &#183; Request feedback</text>
+
+  <rect x="450" y="674" width="170" height="60" rx="8" fill="#FFFFFF"/>
+  <text x="462" y="708" font-size="12.5" font-weight="700" fill="#047857">12 &#183; Client responds</text>
+
+  <rect x="645" y="674" width="170" height="60" rx="8" fill="#FFFFFF"/>
+  <text x="657" y="708" font-size="12.5" font-weight="700" fill="#047857">13 &#183; Agent updates</text>
+
+  <text x="440" y="770" font-size="12.5" font-weight="700" fill="#047857" text-anchor="middle">&#8635; repeats from step 10 each round</text>
+
+  <line x1="440" y1="814" x2="440" y2="870" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- FINAL GATE label -->
+  <text x="40" y="864" font-size="11" font-weight="700" letter-spacing="1" fill="#9CA3AF">FINAL GATE</text>
+
+  <!-- Decision box -->
+  <rect x="290" y="874" width="300" height="58" rx="10" fill="#FFF7ED" stroke="#FDBA74"/>
+  <text x="440" y="898" font-size="13" font-weight="700" fill="#C2410C" text-anchor="middle">14 &#183; Agent asks for final approval</text>
+  <text x="440" y="916" font-size="10.5" fill="#6B7280" text-anchor="middle">at round 5, or earlier if client is satisfied</text>
+
+  <!-- branch lines -->
+  <line x1="440" y1="932" x2="440" y2="950" stroke="#9CA3AF" stroke-width="1.5"/>
+  <line x1="440" y1="950" x2="230" y2="950" stroke="#9CA3AF" stroke-width="1.5"/>
+  <line x1="440" y1="950" x2="650" y2="950" stroke="#9CA3AF" stroke-width="1.5"/>
+  <line x1="230" y1="950" x2="230" y2="962" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="650" y1="950" x2="650" y2="962" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Outcomes -->
+  <rect x="40" y="962" width="380" height="90" rx="10" fill="#ECFDF5" stroke="#6EE7B7"/>
+  <text x="60" y="992" font-size="14" font-weight="700" fill="#047857">Client accepts</text>
+  <text x="60" y="1012" font-size="11" fill="#6B7280">Agent ships the final CE-mark</text>
+  <text x="60" y="1026" font-size="11" fill="#6B7280">submission package. Loop closed.</text>
+
+  <rect x="460" y="962" width="380" height="90" rx="10" fill="#FEF2F2" stroke="#FCA5A5"/>
+  <text x="480" y="992" font-size="14" font-weight="700" fill="#B91C1C">Client declines</text>
+  <text x="480" y="1012" font-size="11" fill="#6B7280">Agent offers to schedule a live</text>
+  <text x="480" y="1026" font-size="11" fill="#6B7280">meeting with the regulatory expert.</text>
+</svg>

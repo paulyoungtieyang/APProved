@@ -1,0 +1,183 @@
+<svg viewBox="0 0 920 1320" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" role="img" aria-labelledby="title desc">
+  <title id="title">EU MDR CE-Mark Agentic Medical Writing Workflow — Final, After Fixes 1-3 and the Bug-Hunt Fixes</title>
+  <desc id="desc">The full workflow after three fixes and a follow-up bug-hunt round: audit-trail consent, scope, data-quality, and classification-plausibility gates screen every request before drafting; the regulation is fetched live from eumdr.com by default, combined with a local reference; the 15% missing-data rule applies to pivotal-trial patient data. Boxes are colored by who acts: client, agent, or regulatory expert. Each step is tagged with whether it involves a Claude call.</desc>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#9CA3AF"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="920" height="1320" fill="#FFFFFF"/>
+
+  <!-- Title -->
+  <text x="40" y="32" font-size="17" font-weight="700" fill="#1A1A1A">EU MDR CE-Mark — Agentic Medical Writing Workflow (final, after fixes 1-3 + the bug-hunt round)</text>
+
+  <!-- Legend row 1: role -->
+  <circle cx="46" cy="56" r="5" fill="#047857"/>
+  <text x="58" y="60" font-size="11.5" font-weight="700" fill="#047857">Client</text>
+  <circle cx="150" cy="56" r="5" fill="#C2410C"/>
+  <text x="162" y="60" font-size="11.5" font-weight="700" fill="#C2410C">Agent</text>
+  <circle cx="250" cy="56" r="5" fill="#B91C1C"/>
+  <text x="262" y="60" font-size="11.5" font-weight="700" fill="#B91C1C">Regulatory Expert</text>
+
+  <!-- Legend row 2: LLM calls -->
+  <rect x="410" y="49" width="94" height="16" rx="8" fill="#DBEAFE" stroke="#1D4ED8"/>
+  <text x="457" y="61" font-size="9.5" font-weight="700" fill="#1D4ED8" text-anchor="middle">Claude call</text>
+  <rect x="514" y="49" width="104" height="16" rx="8" fill="#F3F4F6" stroke="#9CA3AF"/>
+  <text x="566" y="61" font-size="9.5" font-weight="700" fill="#6B7280" text-anchor="middle">no model call</text>
+
+  <!-- SETUP -->
+  <text x="40" y="86" font-size="11" font-weight="700" letter-spacing="1" fill="#9CA3AF">SETUP</text>
+  <rect x="40" y="94" width="410" height="66" rx="10" fill="#ECFDF5" stroke="#6EE7B7"/>
+  <rect x="342" y="104" width="98" height="16" rx="8" fill="#F3F4F6" stroke="#9CA3AF"/>
+  <text x="391" y="115.5" font-size="8.5" font-weight="700" fill="#6B7280" text-anchor="middle">no model call</text>
+  <text x="58" y="120" font-size="13.5" font-weight="700" fill="#047857">① Client uploads data</text>
+  <text x="58" y="138" font-size="10.5" fill="#6B7280">Device data, plus consent to</text>
+  <text x="58" y="151" font-size="10.5" fill="#6B7280">keep an audit trail (fix 2)</text>
+
+  <rect x="470" y="94" width="410" height="66" rx="10" fill="#ECFDF5" stroke="#6EE7B7"/>
+  <rect x="772" y="104" width="98" height="16" rx="8" fill="#F3F4F6" stroke="#9CA3AF"/>
+  <text x="821" y="115.5" font-size="8.5" font-weight="700" fill="#6B7280" text-anchor="middle">no model call</text>
+  <text x="488" y="120" font-size="13.5" font-weight="700" fill="#047857">② Client sets parameters</text>
+  <text x="488" y="138" font-size="10.5" fill="#6B7280">Regulation = EU MDR, device</text>
+  <text x="488" y="151" font-size="10.5" fill="#6B7280">class, CE-mark target</text>
+
+  <line x1="460" y1="160" x2="460" y2="186" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- INTAKE GATES -->
+  <text x="40" y="180" font-size="11" font-weight="700" letter-spacing="1" fill="#9CA3AF">INTAKE GATES — FOUR CHECKS BEFORE ANY DRAFTING STARTS</text>
+  <rect x="40" y="190" width="840" height="264" rx="10" fill="#FFF7ED" stroke="#FDBA74" stroke-width="1.5"/>
+
+  <rect x="700" y="200" width="94" height="16" rx="8" fill="#F3F4F6" stroke="#9CA3AF"/>
+  <text x="747" y="211.5" font-size="8.5" font-weight="700" fill="#6B7280" text-anchor="middle">no model call</text>
+  <text x="60" y="216" font-size="13" font-weight="700" fill="#C2410C">Audit-trail consent check — fix 2</text>
+  <text x="60" y="234" font-size="10.5" fill="#6B7280">Rejects if the client did not consent to being recorded in the audit trail.</text>
+  <text x="60" y="248" font-size="10.5" fill="#6B7280">A decline here is not logged anywhere — there is no consent to log it under.</text>
+  <line x1="60" y1="260" x2="820" y2="260" stroke="#FDE0BB" stroke-width="1"/>
+
+  <rect x="614" y="266" width="180" height="16" rx="8" fill="#DBEAFE" stroke="#1D4ED8"/>
+  <text x="704" y="277.5" font-size="8.5" font-weight="700" fill="#1D4ED8" text-anchor="middle">Claude call · LLM-as-judge</text>
+  <text x="60" y="282" font-size="13" font-weight="700" fill="#C2410C">Scope check — iteration 1</text>
+  <text x="60" y="300" font-size="10.5" fill="#6B7280">Rejects pharmaceuticals and anything that is not an EU MDR medical device.</text>
+  <line x1="60" y1="312" x2="820" y2="312" stroke="#FDE0BB" stroke-width="1"/>
+
+  <rect x="700" y="318" width="94" height="16" rx="8" fill="#F3F4F6" stroke="#9CA3AF"/>
+  <text x="747" y="329.5" font-size="8.5" font-weight="700" fill="#6B7280" text-anchor="middle">no model call</text>
+  <text x="60" y="334" font-size="13" font-weight="700" fill="#C2410C">Data quality check — iteration 2, revised by fix 3</text>
+  <text x="60" y="352" font-size="10.5" fill="#6B7280">Rejects an unparsable upload or a missing required field, and separately rejects</text>
+  <text x="60" y="365" font-size="10.5" fill="#6B7280">if more than 15% of the individual patient data points in the Phase III / pivotal</text>
+  <text x="60" y="378" font-size="10.5" fill="#6B7280">trial dataset are missing — not the six narrative summary fields.</text>
+  <line x1="60" y1="390" x2="820" y2="390" stroke="#FDE0BB" stroke-width="1"/>
+
+  <rect x="614" y="396" width="180" height="16" rx="8" fill="#DBEAFE" stroke="#1D4ED8"/>
+  <text x="704" y="407.5" font-size="8.5" font-weight="700" fill="#1D4ED8" text-anchor="middle">Claude call · LLM-as-judge</text>
+  <text x="60" y="412" font-size="13" font-weight="700" fill="#C2410C">Classification plausibility check — bug-hunt fix</text>
+  <text x="60" y="430" font-size="10.5" fill="#6B7280">Sanity-checks the declared class against the device's own description before</text>
+  <text x="60" y="443" font-size="10.5" fill="#6B7280">drafting — a mismatch is surfaced for an explicit RECLASSIFY / KEEP decision.</text>
+
+  <line x1="460" y1="454" x2="460" y2="480" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- DRAFTING -->
+  <text x="40" y="474" font-size="11" font-weight="700" letter-spacing="1" fill="#9CA3AF">DRAFTING</text>
+  <rect x="40" y="484" width="840" height="228" rx="10" fill="#FFF7ED" stroke="#FDBA74"/>
+
+  <rect x="700" y="494" width="94" height="16" rx="8" fill="#F3F4F6" stroke="#9CA3AF"/>
+  <text x="747" y="505.5" font-size="8.5" font-weight="700" fill="#6B7280" text-anchor="middle">no model call</text>
+  <text x="60" y="510" font-size="13" font-weight="700" fill="#C2410C">③ Agent fetches the regulation — fix 1</text>
+  <text x="60" y="528" font-size="10.5" fill="#6B7280">Live fetch from eumdr.com by default (the source that correctly classifies a CGM</text>
+  <text x="60" y="541" font-size="10.5" fill="#6B7280">as EU MDR Class IIb), combined with the local Annex I/II/III/XIV reference.</text>
+  <line x1="60" y1="553" x2="820" y2="553" stroke="#FDE0BB" stroke-width="1"/>
+
+  <rect x="700" y="559" width="94" height="16" rx="8" fill="#DBEAFE" stroke="#1D4ED8"/>
+  <text x="747" y="570.5" font-size="8.5" font-weight="700" fill="#1D4ED8" text-anchor="middle">Claude call ×6</text>
+  <text x="60" y="575" font-size="13" font-weight="700" fill="#C2410C">④ Agent drafts the CE-mark submission</text>
+  <text x="60" y="593" font-size="10.5" fill="#6B7280">One section drafted per fixed GSPR-mapped clause, in parallel.</text>
+  <line x1="60" y1="605" x2="820" y2="605" stroke="#FDE0BB" stroke-width="1"/>
+
+  <rect x="614" y="611" width="180" height="16" rx="8" fill="#DBEAFE" stroke="#1D4ED8"/>
+  <text x="704" y="622.5" font-size="8.5" font-weight="700" fill="#1D4ED8" text-anchor="middle">Claude call ×6 · LLM-as-judge</text>
+  <text x="60" y="627" font-size="13" font-weight="700" fill="#C2410C">Automated compliance check</text>
+  <text x="60" y="645" font-size="10.5" fill="#6B7280">Scores each section pass/fail before a human ever sees the draft — now run in</text>
+  <text x="60" y="658" font-size="10.5" fill="#6B7280">parallel (bug-hunt fix), one concurrent call per section like drafting.</text>
+  <line x1="60" y1="670" x2="820" y2="670" stroke="#FDE0BB" stroke-width="1"/>
+
+  <text x="60" y="694" font-size="13" font-weight="700" fill="#C2410C">⑤ Agent exports to Word (.docx)</text>
+  <rect x="700" y="678" width="94" height="16" rx="8" fill="#F3F4F6" stroke="#9CA3AF"/>
+  <text x="747" y="689.5" font-size="8.5" font-weight="700" fill="#6B7280" text-anchor="middle">no model call</text>
+
+  <line x1="460" y1="712" x2="460" y2="738" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- INTERNAL QA -->
+  <text x="40" y="732" font-size="11" font-weight="700" letter-spacing="1" fill="#9CA3AF">INTERNAL QA — ONE PASS</text>
+  <rect x="40" y="742" width="840" height="92" rx="10" fill="#FEF2F2" stroke="#FCA5A5"/>
+  <rect x="700" y="750" width="150" height="16" rx="8" fill="#DBEAFE" stroke="#1D4ED8"/>
+  <text x="775" y="761.5" font-size="8.5" font-weight="700" fill="#1D4ED8" text-anchor="middle">Claude call per round</text>
+
+  <text x="75" y="782" font-size="12.5" font-weight="700" fill="#B91C1C">⑥ Agent → Expert</text>
+  <text x="75" y="800" font-size="10.5" fill="#6B7280">sends draft for review</text>
+
+  <text x="278" y="782" font-size="12.5" font-weight="700" fill="#B91C1C">⑦ Expert → Agent</text>
+  <text x="278" y="800" font-size="10.5" fill="#6B7280">suggests improvements</text>
+
+  <text x="481" y="782" font-size="12.5" font-weight="700" fill="#B91C1C">⑧ Agent revises</text>
+  <text x="481" y="800" font-size="10.5" fill="#6B7280">applies suggestions</text>
+
+  <text x="670" y="782" font-size="12.5" font-weight="700" fill="#B91C1C">⑨ Expert validates</text>
+  <text x="670" y="800" font-size="10.5" fill="#6B7280">internal sign-off</text>
+
+  <line x1="460" y1="834" x2="460" y2="860" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- CLIENT LOOP -->
+  <text x="40" y="854" font-size="11" font-weight="700" letter-spacing="1" fill="#9CA3AF">CLIENT REVIEW LOOP — UP TO 5 ROUNDS</text>
+  <rect x="40" y="864" width="840" height="158" rx="12" fill="#ECFDF5" stroke="#6EE7B7" stroke-width="2" stroke-dasharray="6 5"/>
+  <rect x="770" y="852" width="86" height="24" rx="12" fill="#047857"/>
+  <text x="813" y="868" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">×5 max</text>
+  <rect x="700" y="872" width="150" height="16" rx="8" fill="#DBEAFE" stroke="#1D4ED8"/>
+  <text x="775" y="883.5" font-size="8.5" font-weight="700" fill="#1D4ED8" text-anchor="middle">Claude call per round</text>
+
+  <rect x="65" y="892" width="180" height="60" rx="8" fill="#FFFFFF"/>
+  <text x="78" y="926" font-size="12.5" font-weight="700" fill="#047857">⑩ Ship to client</text>
+
+  <rect x="270" y="892" width="180" height="60" rx="8" fill="#FFFFFF"/>
+  <text x="283" y="926" font-size="12.5" font-weight="700" fill="#047857">⑪ Request feedback</text>
+
+  <rect x="475" y="892" width="180" height="60" rx="8" fill="#FFFFFF"/>
+  <text x="488" y="926" font-size="12.5" font-weight="700" fill="#047857">⑫ Client responds</text>
+
+  <rect x="680" y="892" width="180" height="60" rx="8" fill="#FFFFFF"/>
+  <text x="693" y="926" font-size="12.5" font-weight="700" fill="#047857">⑬ Agent updates</text>
+
+  <text x="460" y="988" font-size="12.5" font-weight="700" fill="#047857" text-anchor="middle">↻ repeats from step ⑩ each round</text>
+
+  <line x1="460" y1="1022" x2="460" y2="1048" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- FINAL GATE -->
+  <text x="40" y="1042" font-size="11" font-weight="700" letter-spacing="1" fill="#9CA3AF">FINAL GATE</text>
+  <rect x="260" y="1052" width="400" height="60" rx="10" fill="#FFF7ED" stroke="#FDBA74"/>
+  <rect x="540" y="1062" width="98" height="16" rx="8" fill="#F3F4F6" stroke="#9CA3AF"/>
+  <text x="589" y="1073.5" font-size="8.5" font-weight="700" fill="#6B7280" text-anchor="middle">no model call</text>
+  <text x="278" y="1076" font-size="13" font-weight="700" fill="#C2410C">⑭ Agent asks for final approval</text>
+  <text x="278" y="1094" font-size="10" fill="#6B7280">at round 5, or earlier if the client is satisfied</text>
+
+  <line x1="460" y1="1112" x2="460" y2="1130" stroke="#9CA3AF" stroke-width="1.5"/>
+  <line x1="460" y1="1130" x2="250" y2="1130" stroke="#9CA3AF" stroke-width="1.5"/>
+  <line x1="460" y1="1130" x2="670" y2="1130" stroke="#9CA3AF" stroke-width="1.5"/>
+  <line x1="250" y1="1130" x2="250" y2="1142" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="670" y1="1130" x2="670" y2="1142" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="40" y="1142" width="410" height="86" rx="10" fill="#ECFDF5" stroke="#6EE7B7"/>
+  <text x="60" y="1172" font-size="14" font-weight="700" fill="#047857">Client accepts</text>
+  <text x="60" y="1192" font-size="11" fill="#6B7280">Agent ships the final CE-mark</text>
+  <text x="60" y="1206" font-size="11" fill="#6B7280">submission package. Loop closed.</text>
+
+  <rect x="470" y="1142" width="410" height="86" rx="10" fill="#FEF2F2" stroke="#FCA5A5"/>
+  <text x="490" y="1172" font-size="14" font-weight="700" fill="#B91C1C">Client declines</text>
+  <text x="490" y="1192" font-size="11" fill="#6B7280">Agent offers to schedule a live</text>
+  <text x="490" y="1206" font-size="11" fill="#6B7280">meeting with the regulatory expert.</text>
+
+  <!-- Caption -->
+  <text x="40" y="1260" font-size="11" fill="#4B5563">Every Claude call in the pipeline — the scope and classification checks, drafting, the compliance gate, and every</text>
+  <text x="40" y="1276" font-size="11" fill="#4B5563">review-round redraft — is routed through a single shared module, which now converts a persistent API failure into</text>
+  <text x="40" y="1292" font-size="11" fill="#4B5563">one clear error instead of a raw exception (bug-hunt fix). Consent, data-quality, and regulation-fetch involve no model call.</text>
+</svg>

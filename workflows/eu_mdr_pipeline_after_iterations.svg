@@ -1,0 +1,192 @@
+<svg viewBox="0 0 1040 1440" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" role="img" aria-labelledby="title desc">
+  <title id="title">EU MDR Agentic Workflow — Technical Pipeline (after iterations 1-2)</title>
+  <desc id="desc">The pipeline after adding two intake gates: a scope check (iteration 1) and a data-quality check (iteration 2), both new stages inserted before the regulation fetch. At this point iteration 2 still checks the six narrative intake fields, before fix 3 corrected it to check the pivotal-trial patient data instead. Colored by who acts at each stage. Every model call is routed through the single llm.py module.</desc>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#9CA3AF"/>
+    </marker>
+    <marker id="arrowAmber" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#C2410C"/>
+    </marker>
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1D4ED8"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1040" height="1440" fill="#FFFFFF"/>
+
+  <!-- Title -->
+  <text x="40" y="32" font-size="19" font-weight="700" fill="#1A1A1A">EU MDR Agentic Workflow — Technical Pipeline (after iterations 1-2)</text>
+  <text x="40" y="52" font-size="12" fill="#6B7280">Two new intake-gate stages inserted before the regulation fetch. Iteration 2 still checks the narrative fields here — fix 3 hadn't happened yet.</text>
+
+  <!-- Legend row 1: role -->
+  <circle cx="46" cy="76" r="5" fill="#047857"/>
+  <text x="58" y="80" font-size="11" font-weight="700" fill="#047857">Client</text>
+  <circle cx="200" cy="76" r="5" fill="#C2410C"/>
+  <text x="212" y="80" font-size="11" font-weight="700" fill="#C2410C">Agent</text>
+  <circle cx="340" cy="76" r="5" fill="#B91C1C"/>
+  <text x="352" y="80" font-size="11" font-weight="700" fill="#B91C1C">Regulatory Expert</text>
+
+  <!-- Legend row 2: mechanism -->
+  <circle cx="46" cy="98" r="5" fill="#C2410C" opacity="0.55"/>
+  <text x="58" y="102" font-size="10.5" font-weight="700" fill="#9A6A4E">RAG retrieval</text>
+  <circle cx="200" cy="98" r="5" fill="#1D4ED8"/>
+  <text x="212" y="102" font-size="10.5" font-weight="700" fill="#1D4ED8">Claude call</text>
+  <circle cx="340" cy="98" r="5" fill="#9CA3AF"/>
+  <text x="352" y="102" font-size="10.5" font-weight="700" fill="#6B7280">no model call</text>
+
+  <!-- ============ SPINE ============ -->
+  <!-- S1 config.py -->
+  <rect x="40" y="126" width="560" height="70" rx="10" fill="#ECFDF5" stroke="#6EE7B7"/>
+  <rect x="480" y="138" width="108" height="20" rx="10" fill="#F3F4F6" stroke="#9CA3AF"/>
+  <text x="534" y="152" font-size="9.5" font-weight="700" fill="#6B7280" text-anchor="middle">no model call</text>
+  <text x="58" y="154" font-size="13.5" font-weight="700" fill="#047857">① Client data &amp; parameters — config.py</text>
+  <text x="58" y="176" font-size="11.5" fill="#6B7280">Device data and chosen parameters (EU MDR, device class, market) load as plain structured objects.</text>
+
+  <line x1="320" y1="196" x2="320" y2="222" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="332" y="213" font-size="10" fill="#9CA3AF">device data + params</text>
+
+  <!-- S2 scope_gate.py, NEW, iteration 1 -->
+  <rect x="40" y="222" width="560" height="70" rx="10" fill="#FFF7ED" stroke="#FDBA74" stroke-width="1.5"/>
+  <rect x="420" y="234" width="168" height="20" rx="10" fill="#DBEAFE" stroke="#1D4ED8"/>
+  <text x="504" y="248" font-size="9.5" font-weight="700" fill="#1D4ED8" text-anchor="middle">Claude call · LLM-as-judge</text>
+  <text x="58" y="250" font-size="13.5" font-weight="700" fill="#C2410C">② Scope check — scope_gate.py [NEW, iteration 1]</text>
+  <text x="58" y="272" font-size="11.5" fill="#6B7280">Rejects pharmaceuticals and anything that is not an EU MDR medical device.</text>
+
+  <line x1="320" y1="292" x2="320" y2="318" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="332" y="309" font-size="10" fill="#9CA3AF">in scope</text>
+
+  <!-- S3 data_quality_gate.py, NEW, iteration 2 (original version, pre-fix-3) -->
+  <rect x="40" y="318" width="560" height="92" rx="10" fill="#FFF7ED" stroke="#FDBA74" stroke-width="1.5"/>
+  <rect x="480" y="330" width="108" height="20" rx="10" fill="#F3F4F6" stroke="#9CA3AF"/>
+  <text x="534" y="344" font-size="9.5" font-weight="700" fill="#6B7280" text-anchor="middle">no model call</text>
+  <text x="58" y="346" font-size="13.5" font-weight="700" fill="#C2410C">③ Data quality check — data_quality_gate.py [NEW, iteration 2]</text>
+  <text x="58" y="368" font-size="11.5" fill="#6B7280">Rejects an unparsable upload, or one missing more than 15% of the six</text>
+  <text x="58" y="384" font-size="11.5" fill="#6B7280">required narrative intake fields (device description, risk summary, etc).</text>
+
+  <line x1="320" y1="410" x2="320" y2="436" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="332" y="427" font-size="10" fill="#9CA3AF">data OK</text>
+
+  <!-- S4 regulation.py (RAG) -->
+  <rect x="40" y="436" width="560" height="100" rx="10" fill="#FFF7ED" stroke="#C2410C" stroke-width="1.75"/>
+  <rect x="452" y="448" width="136" height="20" rx="10" fill="#FFEDD5" stroke="#C2410C"/>
+  <text x="520" y="462" font-size="9.5" font-weight="700" fill="#C2410C" text-anchor="middle">RAG retrieval</text>
+  <text x="58" y="464" font-size="13.5" font-weight="700" fill="#C2410C">④ Agent fetches the regulation — regulation.py</text>
+  <text x="58" y="486" font-size="11.5" fill="#6B7280">Retrieves the actual EU MDR Annex I/II/III/XIV text before any</text>
+  <text x="58" y="502" font-size="11.5" fill="#6B7280">drafting happens — grounding, not the model's memory of MDR.</text>
+  <text x="58" y="522" font-size="10" fill="#9CA3AF">Local reference file by default; --live-fetch attempts the live source.</text>
+
+  <line x1="320" y1="536" x2="320" y2="562" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="332" y="553" font-size="10" fill="#9CA3AF">regulation text</text>
+
+  <!-- S5 drafting.py -->
+  <rect x="40" y="562" width="560" height="92" rx="10" fill="#FFF7ED" stroke="#FDBA74"/>
+  <rect x="446" y="574" width="142" height="20" rx="10" fill="#DBEAFE" stroke="#1D4ED8"/>
+  <text x="517" y="588" font-size="9.5" font-weight="700" fill="#1D4ED8" text-anchor="middle">Claude call ×6</text>
+  <text x="58" y="590" font-size="13.5" font-weight="700" fill="#C2410C">⑤ Agent drafts the submission (parallel) — drafting.py</text>
+  <text x="58" y="612" font-size="11.5" fill="#6B7280">One call per fixed MDR section, run concurrently, each</text>
+  <text x="58" y="628" font-size="11.5" fill="#6B7280">prompted with the regulation text retrieved in step 4.</text>
+
+  <line x1="320" y1="654" x2="320" y2="680" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="332" y="671" font-size="10" fill="#9CA3AF">6 draft sections</text>
+
+  <!-- S6 judge.py -->
+  <rect x="40" y="680" width="560" height="92" rx="10" fill="#FFF7ED" stroke="#FDBA74"/>
+  <rect x="404" y="692" width="184" height="20" rx="10" fill="#DBEAFE" stroke="#1D4ED8"/>
+  <text x="496" y="706" font-size="9.5" font-weight="700" fill="#1D4ED8" text-anchor="middle">Claude call ×6 · LLM-as-judge</text>
+  <text x="58" y="708" font-size="13.5" font-weight="700" fill="#C2410C">Automated compliance gate — judge.py</text>
+  <text x="58" y="730" font-size="11.5" fill="#6B7280">A second call scores each section pass/fail against a fixed</text>
+  <text x="58" y="746" font-size="11.5" fill="#6B7280">rubric; a FAIL redrafts only that section, before any human sees it.</text>
+
+  <line x1="320" y1="772" x2="320" y2="798" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="332" y="789" font-size="10" fill="#9CA3AF">pass/fail + revised sections</text>
+
+  <!-- S7 docx_export.py -->
+  <rect x="40" y="798" width="560" height="70" rx="10" fill="#FFF7ED" stroke="#FDBA74"/>
+  <rect x="480" y="810" width="108" height="20" rx="10" fill="#F3F4F6" stroke="#9CA3AF"/>
+  <text x="534" y="824" font-size="9.5" font-weight="700" fill="#6B7280" text-anchor="middle">no model call</text>
+  <text x="58" y="826" font-size="13.5" font-weight="700" fill="#C2410C">⑥ Export to Word — docx_export.py</text>
+  <text x="58" y="848" font-size="11.5" fill="#6B7280">Sections are assembled into 01_draft_pre_expert.docx.</text>
+
+  <line x1="320" y1="868" x2="320" y2="894" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="332" y="885" font-size="10" fill="#9CA3AF">01_draft_pre_expert.docx</text>
+
+  <!-- S8 review.py internal_expert_review -->
+  <rect x="40" y="894" width="560" height="92" rx="10" fill="#FEF2F2" stroke="#FCA5A5"/>
+  <rect x="424" y="906" width="164" height="20" rx="10" fill="#DBEAFE" stroke="#1D4ED8"/>
+  <text x="506" y="920" font-size="9.5" font-weight="700" fill="#1D4ED8" text-anchor="middle">Claude call per round</text>
+  <text x="58" y="922" font-size="13.5" font-weight="700" fill="#B91C1C">⑦ Internal expert review — review.py</text>
+  <text x="58" y="944" font-size="11.5" fill="#6B7280">The expert's written feedback drives a redraft call, grounded</text>
+  <text x="58" y="960" font-size="11.5" fill="#6B7280">in the same regulation text, repeated until they approve.</text>
+
+  <line x1="320" y1="986" x2="320" y2="1012" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="332" y="1003" font-size="10" fill="#9CA3AF">02_expert_validated.docx</text>
+
+  <!-- S9 review.py client_review_loop -->
+  <rect x="40" y="1012" width="560" height="98" rx="10" fill="#ECFDF5" stroke="#6EE7B7" stroke-width="1.5"/>
+  <rect x="424" y="1024" width="164" height="20" rx="10" fill="#DBEAFE" stroke="#1D4ED8"/>
+  <text x="506" y="1038" font-size="9.5" font-weight="700" fill="#1D4ED8" text-anchor="middle">Claude call per round</text>
+  <rect x="494" y="1048" width="94" height="20" rx="10" fill="#047857"/>
+  <text x="541" y="1062" font-size="9.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">×5 rounds max</text>
+  <text x="58" y="1040" font-size="13.5" font-weight="700" fill="#047857">⑧ Client review loop — review.py</text>
+  <text x="58" y="1062" font-size="11.5" fill="#6B7280">Same pattern with the client: ship, collect feedback, redraft —</text>
+  <text x="58" y="1078" font-size="11.5" fill="#6B7280">up to 5 rounds, fewer if the client approves early.</text>
+
+  <line x1="320" y1="1110" x2="320" y2="1136" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="332" y="1127" font-size="10" fill="#9CA3AF">round cap reached, no approval</text>
+
+  <!-- S10 final decision -->
+  <rect x="40" y="1136" width="560" height="80" rx="10" fill="#FFF7ED" stroke="#FDBA74"/>
+  <rect x="480" y="1148" width="108" height="20" rx="10" fill="#F3F4F6" stroke="#9CA3AF"/>
+  <text x="534" y="1162" font-size="9.5" font-weight="700" fill="#6B7280" text-anchor="middle">no model call</text>
+  <text x="58" y="1164" font-size="13.5" font-weight="700" fill="#C2410C">⑨ Final decision — main.py</text>
+  <text x="58" y="1186" font-size="11.5" fill="#6B7280">Round 5 with no approval forces an accept/decline choice.</text>
+  <text x="58" y="1202" font-size="11.5" fill="#6B7280">A plain text branch — the client's word decides, not a model.</text>
+
+  <!-- branch to outcomes -->
+  <line x1="320" y1="1216" x2="320" y2="1234" stroke="#9CA3AF" stroke-width="1.5"/>
+  <line x1="320" y1="1234" x2="180" y2="1234" stroke="#9CA3AF" stroke-width="1.5"/>
+  <line x1="320" y1="1234" x2="460" y2="1234" stroke="#9CA3AF" stroke-width="1.5"/>
+  <line x1="180" y1="1234" x2="180" y2="1246" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="460" y1="1234" x2="460" y2="1246" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="40" y="1246" width="280" height="80" rx="10" fill="#ECFDF5" stroke="#6EE7B7"/>
+  <text x="58" y="1272" font-size="13" font-weight="700" fill="#047857">Client accepts</text>
+  <text x="58" y="1292" font-size="11" fill="#6B7280">Ships 03_FINAL_shipped.docx —</text>
+  <text x="58" y="1306" font-size="11" fill="#6B7280">loop closed.</text>
+
+  <rect x="320" y="1246" width="280" height="80" rx="10" fill="#FEF2F2" stroke="#FCA5A5"/>
+  <text x="338" y="1272" font-size="13" font-weight="700" fill="#B91C1C">Client declines</text>
+  <text x="338" y="1292" font-size="11" fill="#6B7280">schedule_meeting() creates a request</text>
+  <text x="338" y="1306" font-size="11" fill="#6B7280">to call the regulatory expert.</text>
+
+  <!-- ============ RAIL: regulation text (RAG), reused as grounding ============ -->
+  <text x="700" y="440" font-size="10" font-weight="700" fill="#C2410C">regulation text</text>
+  <text x="700" y="453" font-size="9.5" fill="#B45309">(RAG-retrieved once,</text>
+  <text x="700" y="465" font-size="9.5" fill="#B45309">reused as grounding)</text>
+
+  <line x1="600" y1="486" x2="700" y2="486" stroke="#C2410C" stroke-width="1.5" marker-end="url(#arrowAmber)"/>
+  <line x1="700" y1="486" x2="700" y2="1061" stroke="#C2410C" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <line x1="700" y1="608" x2="600" y2="608" stroke="#C2410C" stroke-width="1.5" marker-end="url(#arrowAmber)"/>
+  <line x1="700" y1="940" x2="600" y2="940" stroke="#C2410C" stroke-width="1.5" marker-end="url(#arrowAmber)"/>
+  <line x1="700" y1="1061" x2="600" y2="1061" stroke="#C2410C" stroke-width="1.5" marker-end="url(#arrowAmber)"/>
+
+  <!-- ============ RAIL: llm.py, the only file that calls Claude ============ -->
+  <rect x="830" y="195" width="90" height="30" rx="8" fill="#EFF6FF" stroke="#1D4ED8" stroke-width="1.5"/>
+  <text x="875" y="214" font-size="11" font-weight="700" fill="#1D4ED8" text-anchor="middle">llm.py</text>
+  <text x="826" y="163" font-size="9.5" fill="#1D4ED8" text-anchor="middle">routes through</text>
+  <text x="826" y="175" font-size="9.5" fill="#1D4ED8" text-anchor="middle">every Claude call</text>
+
+  <line x1="875" y1="225" x2="875" y2="1077" stroke="#1D4ED8" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <line x1="875" y1="257" x2="600" y2="257" stroke="#1D4ED8" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+  <line x1="875" y1="624" x2="600" y2="624" stroke="#1D4ED8" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+  <line x1="875" y1="726" x2="600" y2="726" stroke="#1D4ED8" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+  <line x1="875" y1="956" x2="600" y2="956" stroke="#1D4ED8" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+  <line x1="875" y1="1077" x2="600" y2="1077" stroke="#1D4ED8" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+
+  <!-- Caption -->
+  <text x="40" y="1360" font-size="11.5" fill="#4B5563">Two new stages (② scope check, ③ data quality check) now screen every request before drafting begins. The</text>
+  <text x="40" y="1376" font-size="11.5" fill="#4B5563">regulation text is fetched once (④) and reused as grounding wherever a section is written or rewritten (⑤⑦⑧) — the</text>
+  <text x="40" y="1392" font-size="11.5" fill="#4B5563">automated gate checks a fixed rubric instead. Every model call, including the new scope check, routes through llm.py.</text>
+</svg>

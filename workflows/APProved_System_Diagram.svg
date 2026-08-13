@@ -1,0 +1,201 @@
+<svg viewBox="0 0 1580 445" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" role="img" aria-labelledby="title desc">
+  <title id="title">APProved AI System Diagram — EU MDR CE-Mark Drafting</title>
+  <desc id="desc">Inputs (client data, parameters, prior dossiers) feed an eight-step processing pipeline: parse and validate, retrieve regulation via RAG, draft sections in parallel LLM calls, merge and format to Word, an automated LLM-as-Judge compliance gate that can loop back to drafting on failure, a human regulatory-expert review loop, a human client review loop capped at five rounds, and a final routing decision. Each pipeline step is backed by a tool or data source shown below it. Validation and human-in-the-loop checkpoints are shown above the relevant steps. The pipeline ends in one of two outputs: the shipped final package, or an escalation to a scheduled meeting.</desc>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#9CA3AF"/>
+    </marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#B91C1C"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1580" height="445" fill="#FFFFFF"/>
+
+  <!-- Title -->
+  <text x="30" y="26" font-size="17" font-weight="700" fill="#1A1A1A">APProved &#8212; AI System Diagram (EU MDR CE-Mark Drafting)</text>
+  <text x="30" y="44" font-size="11" fill="#6B7280">Inputs &#8594; Processing pipeline &#8594; Tools &amp; data sources &#8594; Validation / human-in-the-loop &#8594; Outputs</text>
+
+  <!-- Legend -->
+  <g font-size="10" font-weight="700">
+    <circle cx="34" cy="60" r="4" fill="#1D4ED8"/><text x="42" y="64" fill="#1D4ED8">Inputs</text>
+    <circle cx="130" cy="60" r="4" fill="#C2410C"/><text x="138" y="64" fill="#C2410C">Processing (LLM calls)</text>
+    <circle cx="300" cy="60" r="4" fill="#6D28D9"/><text x="308" y="64" fill="#6D28D9">Tools / data sources</text>
+    <circle cx="450" cy="60" r="4" fill="#B45309"/><text x="458" y="64" fill="#B45309">Automated check</text>
+    <circle cx="600" cy="60" r="4" fill="#047857"/><text x="608" y="64" fill="#047857">Human checkpoint</text>
+    <circle cx="750" cy="60" r="4" fill="#374151"/><text x="758" y="64" fill="#374151">Output</text>
+  </g>
+
+  <!-- Section labels -->
+  <text x="30" y="76" font-size="10" font-weight="700" letter-spacing="0.5" fill="#9CA3AF">INPUTS</text>
+  <text x="670" y="76" font-size="10" font-weight="700" letter-spacing="0.5" fill="#9CA3AF">VALIDATION / HUMAN-IN-THE-LOOP</text>
+  <text x="30" y="210" font-size="10" font-weight="700" letter-spacing="0.5" fill="#9CA3AF">PROCESSING PIPELINE</text>
+  <text x="1330" y="210" font-size="10" font-weight="700" letter-spacing="0.5" fill="#9CA3AF">OUTPUTS</text>
+  <text x="30" y="310" font-size="10" font-weight="700" letter-spacing="0.5" fill="#9CA3AF">TOOLS &amp; DATA SOURCES</text>
+
+  <!-- ===== INPUT BOXES ===== -->
+  <g>
+    <rect x="30" y="80" width="140" height="95" rx="8" fill="#EFF6FF" stroke="#93C5FD"/>
+    <text x="42" y="100" font-size="12" font-weight="700" fill="#1D4ED8">Client data</text>
+    <text x="42" y="118" font-size="9.5" fill="#6B7280">Device / clinical</text>
+    <text x="42" y="130" font-size="9.5" fill="#6B7280">files: CSV, XLSX,</text>
+    <text x="42" y="142" font-size="9.5" fill="#6B7280">PDF, DOCX</text>
+
+    <rect x="185" y="80" width="150" height="95" rx="8" fill="#EFF6FF" stroke="#93C5FD"/>
+    <text x="197" y="100" font-size="12" font-weight="700" fill="#1D4ED8">Client parameters</text>
+    <text x="197" y="118" font-size="9.5" fill="#6B7280">Regulation = EU MDR,</text>
+    <text x="197" y="130" font-size="9.5" fill="#6B7280">device class, target</text>
+    <text x="197" y="142" font-size="9.5" fill="#6B7280">market, language</text>
+
+    <rect x="350" y="80" width="140" height="95" rx="8" fill="#EFF6FF" stroke="#93C5FD"/>
+    <text x="362" y="100" font-size="12" font-weight="700" fill="#1D4ED8">Prior dossiers</text>
+    <text x="362" y="118" font-size="9.5" fill="#6B7280">Document Library</text>
+    <text x="362" y="130" font-size="9.5" fill="#6B7280">history, used for</text>
+    <text x="362" y="142" font-size="9.5" fill="#6B7280">style &amp; context</text>
+  </g>
+
+  <!-- input fan-in arrows to P1 -->
+  <path d="M 100 175 L 100 215" stroke="#9CA3AF" stroke-width="1.3" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 260 175 L 130 215" stroke="#9CA3AF" stroke-width="1.3" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 420 175 Q 420 200 155 214" stroke="#9CA3AF" stroke-width="1.3" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- ===== VALIDATION / HITL BOXES (aligned above P5-P8) ===== -->
+  <g>
+    <rect x="670" y="80" width="150" height="95" rx="8" fill="#FFFBEB" stroke="#FCD34D"/>
+    <text x="682" y="100" font-size="11.5" font-weight="700" fill="#B45309">Gate: LLM-as-Judge</text>
+    <text x="682" y="118" font-size="9.5" fill="#92650B">Scores GSPR</text>
+    <text x="682" y="130" font-size="9.5" fill="#92650B">coverage + citation</text>
+    <text x="682" y="142" font-size="9.5" fill="#92650B">accuracy &#183; pass/fail</text>
+
+    <rect x="840" y="80" width="140" height="95" rx="8" fill="#ECFDF5" stroke="#6EE7B7"/>
+    <text x="852" y="100" font-size="11.5" font-weight="700" fill="#047857">Human: Expert</text>
+    <text x="852" y="118" font-size="9.5" fill="#065F46">Regulatory expert</text>
+    <text x="852" y="130" font-size="9.5" fill="#065F46">sign-off &#8212; one</text>
+    <text x="852" y="142" font-size="9.5" fill="#065F46">internal QA pass</text>
+
+    <rect x="1000" y="80" width="150" height="95" rx="8" fill="#ECFDF5" stroke="#6EE7B7"/>
+    <text x="1012" y="100" font-size="11.5" font-weight="700" fill="#047857">Human: Client</text>
+    <text x="1012" y="118" font-size="9.5" fill="#065F46">Client sign-off &#8212;</text>
+    <text x="1012" y="130" font-size="9.5" fill="#065F46">iterative, capped</text>
+    <text x="1012" y="142" font-size="9.5" fill="#065F46">at 5 rounds</text>
+
+    <rect x="1170" y="80" width="140" height="95" rx="8" fill="#ECFDF5" stroke="#6EE7B7"/>
+    <text x="1182" y="100" font-size="11.5" font-weight="700" fill="#047857">Human: Decision</text>
+    <text x="1182" y="118" font-size="9.5" fill="#065F46">Client gives final</text>
+    <text x="1182" y="130" font-size="9.5" fill="#065F46">accept / decline</text>
+  </g>
+
+  <!-- down arrows from validation to spine -->
+  <path d="M 745 175 L 745 215" stroke="#9CA3AF" stroke-width="1.3" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 910 175 L 910 215" stroke="#9CA3AF" stroke-width="1.3" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 1075 175 L 1075 215" stroke="#9CA3AF" stroke-width="1.3" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 1240 175 L 1240 215" stroke="#9CA3AF" stroke-width="1.3" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- ===== PROCESSING SPINE ===== -->
+  <g>
+    <rect x="30" y="215" width="140" height="70" rx="8" fill="#FFF7ED" stroke="#FDBA74"/>
+    <text x="42" y="240" font-size="12.5" font-weight="700" fill="#C2410C">1 &#183; Parse &amp; validate</text>
+    <text x="42" y="258" font-size="9.5" fill="#6B7280">input schema check</text>
+
+    <rect x="190" y="215" width="140" height="70" rx="8" fill="#FFF7ED" stroke="#FDBA74"/>
+    <text x="202" y="240" font-size="12.5" font-weight="700" fill="#C2410C">2 &#183; Retrieve reg.</text>
+    <text x="202" y="258" font-size="9.5" fill="#6B7280">RAG tool call</text>
+
+    <rect x="350" y="215" width="140" height="70" rx="8" fill="#FFF7ED" stroke="#FDBA74"/>
+    <text x="362" y="240" font-size="12.5" font-weight="700" fill="#C2410C">3 &#183; Draft sections</text>
+    <text x="362" y="258" font-size="9.5" fill="#6B7280">parallel LLM calls</text>
+
+    <rect x="510" y="215" width="140" height="70" rx="8" fill="#FFF7ED" stroke="#FDBA74"/>
+    <text x="522" y="240" font-size="12.5" font-weight="700" fill="#C2410C">4 &#183; Merge &amp; format</text>
+    <text x="522" y="258" font-size="9.5" fill="#6B7280">assemble + export .docx</text>
+
+    <rect x="670" y="215" width="150" height="70" rx="8" fill="#FFF7ED" stroke="#FDBA74"/>
+    <text x="682" y="240" font-size="12.5" font-weight="700" fill="#C2410C">5 &#183; Compliance check</text>
+    <text x="682" y="258" font-size="9.5" fill="#6B7280">LLM-as-Judge, pass/fail</text>
+
+    <rect x="840" y="215" width="140" height="70" rx="8" fill="#FFF7ED" stroke="#FDBA74"/>
+    <text x="852" y="240" font-size="12.5" font-weight="700" fill="#C2410C">6 &#183; Expert review</text>
+    <text x="852" y="258" font-size="9.5" fill="#6B7280">human loop, 1 pass</text>
+
+    <rect x="1000" y="215" width="150" height="70" rx="8" fill="#FFF7ED" stroke="#FDBA74"/>
+    <text x="1012" y="240" font-size="12.5" font-weight="700" fill="#C2410C">7 &#183; Client review</text>
+    <text x="1012" y="258" font-size="9.5" fill="#6B7280">human loop, &#8804; 5&#215;</text>
+
+    <rect x="1170" y="215" width="140" height="70" rx="8" fill="#FFF7ED" stroke="#FDBA74"/>
+    <text x="1182" y="240" font-size="12.5" font-weight="700" fill="#C2410C">8 &#183; Final routing</text>
+    <text x="1182" y="258" font-size="9.5" fill="#6B7280">accept / decline branch</text>
+  </g>
+
+  <!-- spine connecting arrows -->
+  <line x1="170" y1="250" x2="188" y2="250" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="330" y1="250" x2="348" y2="250" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="490" y1="250" x2="508" y2="250" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="650" y1="250" x2="668" y2="250" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="820" y1="250" x2="838" y2="250" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="980" y1="250" x2="998" y2="250" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="1150" y1="250" x2="1168" y2="250" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- fail loop-back: P5 -> P3 -->
+  <path d="M 720 285 C 720 313 420 313 420 287" stroke="#B91C1C" stroke-width="1.3" fill="none" stroke-dasharray="4 3" marker-end="url(#arrowRed)"/>
+  <rect x="465" y="292" width="215" height="14" fill="#FFFFFF"/>
+  <text x="480" y="303" font-size="9" fill="#B91C1C" font-weight="600">fail &#8594; redraft targeted section</text>
+
+  <!-- self-loop icon on P7 -->
+  <text x="1145" y="212" font-size="13" fill="#C2410C" text-anchor="middle">&#8635;</text>
+
+  <!-- ===== OUTPUT BOXES ===== -->
+  <rect x="1330" y="210" width="220" height="65" rx="8" fill="#F3F4F6" stroke="#D1D5DB"/>
+  <text x="1342" y="230" font-size="11.5" font-weight="700" fill="#374151">Ship final package</text>
+  <text x="1342" y="246" font-size="9.5" fill="#6B7280">CE-mark technical docs (Word/PDF)</text>
+  <text x="1342" y="258" font-size="9.5" fill="#6B7280">+ Document Library entry</text>
+
+  <rect x="1330" y="288" width="220" height="65" rx="8" fill="#F3F4F6" stroke="#D1D5DB"/>
+  <text x="1342" y="308" font-size="11.5" font-weight="700" fill="#374151">Escalation</text>
+  <text x="1342" y="324" font-size="9.5" fill="#6B7280">Meeting scheduled with</text>
+  <text x="1342" y="336" font-size="9.5" fill="#6B7280">regulatory expert</text>
+
+  <path d="M 1310 235 L 1328 235" stroke="#9CA3AF" stroke-width="1.3" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 1310 250 Q 1320 300 1328 315" stroke="#9CA3AF" stroke-width="1.3" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- ===== TOOLS ROW ===== -->
+  <g>
+    <rect x="30" y="315" width="140" height="85" rx="8" fill="#F5F3FF" stroke="#C4B5FD"/>
+    <text x="42" y="335" font-size="11" font-weight="700" fill="#6D28D9">File parser</text>
+    <text x="42" y="351" font-size="9.5" fill="#6B7280">extracts &amp; validates</text>
+    <text x="42" y="363" font-size="9.5" fill="#6B7280">uploaded formats</text>
+
+    <rect x="190" y="315" width="140" height="85" rx="8" fill="#F5F3FF" stroke="#C4B5FD"/>
+    <text x="202" y="335" font-size="11" font-weight="700" fill="#6D28D9">MDR/MDCG store</text>
+    <text x="202" y="351" font-size="9.5" fill="#6B7280">RAG over EUR-Lex</text>
+    <text x="202" y="363" font-size="9.5" fill="#6B7280">+ MDCG guidance</text>
+
+    <rect x="350" y="315" width="300" height="85" rx="8" fill="#F5F3FF" stroke="#C4B5FD"/>
+    <text x="362" y="335" font-size="11" font-weight="700" fill="#6D28D9">Claude drafting calls + docx generator</text>
+    <text x="362" y="351" font-size="9.5" fill="#6B7280">one parallel call per GSPR / Annex section,</text>
+    <text x="362" y="363" font-size="9.5" fill="#6B7280">merged and exported to Word</text>
+
+    <rect x="670" y="315" width="150" height="85" rx="8" fill="#F5F3FF" stroke="#C4B5FD"/>
+    <text x="682" y="335" font-size="11" font-weight="700" fill="#6D28D9">Judge rubric engine</text>
+    <text x="682" y="351" font-size="9.5" fill="#6B7280">checklist-driven LLM</text>
+    <text x="682" y="363" font-size="9.5" fill="#6B7280">scoring, not free-text</text>
+
+    <rect x="840" y="315" width="310" height="85" rx="8" fill="#F5F3FF" stroke="#C4B5FD"/>
+    <text x="852" y="335" font-size="11" font-weight="700" fill="#6D28D9">Notification + Document Library API</text>
+    <text x="852" y="351" font-size="9.5" fill="#6B7280">routes drafts to expert/client, versions every</text>
+    <text x="852" y="363" font-size="9.5" fill="#6B7280">round, writes the audit trail</text>
+
+    <rect x="1170" y="315" width="140" height="85" rx="8" fill="#F5F3FF" stroke="#C4B5FD"/>
+    <text x="1182" y="335" font-size="11" font-weight="700" fill="#6D28D9">Scheduling API</text>
+    <text x="1182" y="351" font-size="9.5" fill="#6B7280">books the escalation</text>
+    <text x="1182" y="363" font-size="9.5" fill="#6B7280">meeting on decline</text>
+  </g>
+
+  <!-- up arrows tools -> spine -->
+  <path d="M 100 315 L 100 287" stroke="#9CA3AF" stroke-width="1.3" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 260 315 L 260 287" stroke="#9CA3AF" stroke-width="1.3" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 500 315 L 420 287" stroke="#9CA3AF" stroke-width="1.3" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 745 315 L 745 287" stroke="#9CA3AF" stroke-width="1.3" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 995 315 L 910 287" stroke="#9CA3AF" stroke-width="1.3" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 1240 315 L 1240 287" stroke="#9CA3AF" stroke-width="1.3" fill="none" marker-end="url(#arrow)"/>
+</svg>

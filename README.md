@@ -14,6 +14,16 @@ fixed function call in `main.py`, not an LLM deciding its own next move.
 That's a deliberate choice — see `main.py`'s docstring and the
 `recommended_agentic_pattern` diagram from earlier in this project for why.
 
+## Versioning
+
+This repository is **Prototype 1 — the UCLA Anderson EMBA "Agentic AI for
+Managers" course version**, tagged [`v1.0`](../../releases/tag/v1.0) at the
+commit this was submitted at. Later prototypes that build on this one (new
+regulations, real retrieval, a production human-in-the-loop channel, etc.)
+are expected to live as their own tagged versions or branches rather than
+overwriting this baseline, so `v1.0` stays a stable reference point for
+what was actually built and evaluated for the course.
+
 ## Project layout
 
 | File | Workflow step(s) | Pattern |

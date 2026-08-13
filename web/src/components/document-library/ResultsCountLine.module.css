@@ -1,0 +1,5 @@
+.line {
+  font-size: 12px;
+  color: var(--ink-muted);
+  margin: 0 0 10px;
+}

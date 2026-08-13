@@ -1,0 +1,10 @@
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.sectionTitle {
+  font-family: var(--font-display);
+  font-size: 15px;
+  margin: 0 0 14px;
+}

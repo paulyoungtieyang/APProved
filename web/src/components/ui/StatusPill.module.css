@@ -1,0 +1,29 @@
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.neutral {
+  background: var(--surface-2);
+  color: var(--ink-muted);
+}
+.good {
+  background: var(--good-soft);
+  color: var(--good);
+}
+.bad {
+  background: var(--bad-soft);
+  color: var(--bad);
+}
+.decision {
+  background: var(--decision-soft);
+  color: var(--decision);
+}
+.accent {
+  background: var(--accent-soft);
+  color: var(--accent);
+}

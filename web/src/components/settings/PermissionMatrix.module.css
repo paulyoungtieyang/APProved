@@ -1,0 +1,53 @@
+.scroll {
+  overflow-x: auto;
+}
+.table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 12.5px;
+}
+.dimHeader {
+  text-align: left;
+  padding: 8px 12px 8px 4px;
+  color: var(--ink-muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+.roleHeader {
+  text-align: center;
+  padding: 8px 12px;
+  color: var(--ink-muted);
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.dimCell {
+  padding: 10px 12px 10px 4px;
+  color: var(--ink);
+  border-top: 1px solid var(--border);
+  white-space: nowrap;
+}
+.valueCell {
+  text-align: center;
+  padding: 10px 12px;
+  border-top: 1px solid var(--border);
+}
+.dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 700;
+}
+.yes {
+  background: var(--good-soft);
+  color: var(--good);
+}
+.no {
+  color: var(--ink-faint);
+}

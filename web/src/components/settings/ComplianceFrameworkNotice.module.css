@@ -1,0 +1,20 @@
+.wrap {
+  background: var(--decision-soft);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+.title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--decision);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.body {
+  font-size: 12.5px;
+  color: var(--ink);
+  margin: 0;
+  line-height: 1.55;
+}

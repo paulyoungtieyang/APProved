@@ -1,0 +1,28 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
+}
+.card:hover {
+  border-color: var(--accent);
+}
+.icon {
+  font-size: 18px;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+.title {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--ink);
+}
+.blurb {
+  font-size: 11.5px;
+  color: var(--ink-muted);
+}

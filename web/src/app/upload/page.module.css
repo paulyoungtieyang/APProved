@@ -1,0 +1,28 @@
+.mainGrid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+.leftCol {
+  min-width: 0;
+}
+.rightCol {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.spacer {
+  height: 16px;
+}
+.sectionTitle {
+  font-family: var(--font-display);
+  font-size: 15px;
+  margin: 0 0 12px;
+}
+
+@media (max-width: 900px) {
+  .mainGrid {
+    grid-template-columns: 1fr;
+  }
+}

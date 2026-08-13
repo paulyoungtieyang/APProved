@@ -1,0 +1,32 @@
+.kpiGrid {
+  grid-template-columns: repeat(3, 1fr);
+  margin-bottom: 24px;
+}
+.mainGrid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+.leftCol {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.rightCol {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.actionsGrid {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media (max-width: 900px) {
+  .kpiGrid {
+    grid-template-columns: 1fr;
+  }
+  .mainGrid {
+    grid-template-columns: 1fr;
+  }
+}

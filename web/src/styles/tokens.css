@@ -1,0 +1,79 @@
+/* ============ Design tokens ============
+   Ported verbatim from demo/APProved_Clickable_Demo.html so the new SaaS
+   shell visually belongs to the same product. Light theme lives on bare
+   :root. Dark redefines the same tokens twice (prefers-color-scheme, then
+   [data-theme=dark]) so an explicit toggle always wins. Everything
+   downstream reads tokens only -- never a literal color. */
+:root {
+  --bg: #F4F6F7;
+  --surface: #FFFFFF;
+  --surface-2: #EEF1F2;
+  --ink: #11161C;
+  --ink-muted: #5B6472;
+  --ink-faint: #8A93A0;
+  --border: #DFE3E7;
+  --border-strong: #C6CCD2;
+
+  --accent: #0E6E64;          /* agent / "the system working" */
+  --accent-ink: #FFFFFF;
+  --accent-soft: #E3F0EE;
+
+  --decision: #B9790A;        /* a human decision point */
+  --decision-soft: #FBF0DC;
+
+  --good: #2F8F5B;            /* pass / accept */
+  --good-soft: #E7F4EC;
+  --bad: #B23A2E;              /* fail / decline */
+  --bad-soft: #FBEAE8;
+
+  --role-client: #2F8F5B;
+  --role-agent: #0E6E64;
+  --role-expert: #7A2E3A;
+
+  --shadow: 0 1px 2px rgba(17,22,28,.06), 0 8px 24px -12px rgba(17,22,28,.18);
+
+  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14181D;
+    --surface: #1B2027;
+    --surface-2: #212832;
+    --ink: #E7EAEE;
+    --ink-muted: #9BA4B0;
+    --ink-faint: #6B7480;
+    --border: #2A313B;
+    --border-strong: #3A4350;
+
+    --accent: #3FB2A4;
+    --accent-ink: #0B1512;
+    --accent-soft: #17302C;
+
+    --decision: #E0A23D;
+    --decision-soft: #332711;
+
+    --good: #4CAF7C;
+    --good-soft: #16281F;
+    --bad: #E2564A;
+    --bad-soft: #341D1B;
+
+    --role-client: #4CAF7C;
+    --role-agent: #3FB2A4;
+    --role-expert: #D97A88;
+
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 32px -16px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #14181D; --surface: #1B2027; --surface-2: #212832;
+  --ink: #E7EAEE; --ink-muted: #9BA4B0; --ink-faint: #6B7480;
+  --border: #2A313B; --border-strong: #3A4350;
+  --accent: #3FB2A4; --accent-ink: #0B1512; --accent-soft: #17302C;
+  --decision: #E0A23D; --decision-soft: #332711;
+  --good: #4CAF7C; --good-soft: #16281F; --bad: #E2564A; --bad-soft: #341D1B;
+  --role-client: #4CAF7C; --role-agent: #3FB2A4; --role-expert: #D97A88;
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 32px -16px rgba(0,0,0,.6);
+}

@@ -24,6 +24,17 @@ are expected to live as their own tagged versions or branches rather than
 overwriting this baseline, so `v1.0` stays a stable reference point for
 what was actually built and evaluated for the course.
 
+## Clickable demo
+
+`demo/APProved_Clickable_Demo.html` is a self-contained, click-through
+walkthrough of this pipeline — no server, no build step, no dependencies.
+Download it and open it directly in a browser, or preview it at
+`https://htmlpreview.github.io/?https://github.com/paulyoungtieyang/APProved/blob/prototype-1-ucla-version/demo/APProved_Clickable_Demo.html`.
+It uses the pipeline's real gate messaging and section titles across four
+scenarios (happy path, a scope-gate decline, a data-quality decline, and a
+classification flag requiring a human RECLASSIFY/KEEP decision) — it's a
+UI walkthrough of the real logic, not a live-running copy of the backend.
+
 ## Project layout
 
 | File | Workflow step(s) | Pattern |

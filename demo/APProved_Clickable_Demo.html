@@ -1,0 +1,783 @@
+<meta charset="utf-8">
+<title>APProved — Interactive Prototype</title>
+<style>
+  /* ============ Design tokens ============
+     Light theme lives on bare :root. Dark redefines the same tokens twice
+     (prefers-color-scheme, then [data-theme=dark]) so an explicit toggle
+     always wins. Everything downstream reads tokens only. */
+  :root {
+    --bg: #F4F6F7;
+    --surface: #FFFFFF;
+    --surface-2: #EEF1F2;
+    --ink: #11161C;
+    --ink-muted: #5B6472;
+    --ink-faint: #8A93A0;
+    --border: #DFE3E7;
+    --border-strong: #C6CCD2;
+
+    --accent: #0E6E64;          /* agent / "the system working" */
+    --accent-ink: #FFFFFF;
+    --accent-soft: #E3F0EE;
+
+    --decision: #B9790A;        /* a human decision point */
+    --decision-soft: #FBF0DC;
+
+    --good: #2F8F5B;            /* pass / accept */
+    --good-soft: #E7F4EC;
+    --bad: #B23A2E;             /* fail / decline */
+    --bad-soft: #FBEAE8;
+
+    --role-client: #2F8F5B;
+    --role-agent: #0E6E64;
+    --role-expert: #7A2E3A;
+
+    --shadow: 0 1px 2px rgba(17,22,28,.06), 0 8px 24px -12px rgba(17,22,28,.18);
+
+    --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14181D;
+      --surface: #1B2027;
+      --surface-2: #212832;
+      --ink: #E7EAEE;
+      --ink-muted: #9BA4B0;
+      --ink-faint: #6B7480;
+      --border: #2A313B;
+      --border-strong: #3A4350;
+
+      --accent: #3FB2A4;
+      --accent-ink: #0B1512;
+      --accent-soft: #17302C;
+
+      --decision: #E0A23D;
+      --decision-soft: #332711;
+
+      --good: #4CAF7C;
+      --good-soft: #16281F;
+      --bad: #E2564A;
+      --bad-soft: #341D1B;
+
+      --role-client: #4CAF7C;
+      --role-agent: #3FB2A4;
+      --role-expert: #D97A88;
+
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 32px -16px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14181D; --surface: #1B2027; --surface-2: #212832;
+    --ink: #E7EAEE; --ink-muted: #9BA4B0; --ink-faint: #6B7480;
+    --border: #2A313B; --border-strong: #3A4350;
+    --accent: #3FB2A4; --accent-ink: #0B1512; --accent-soft: #17302C;
+    --decision: #E0A23D; --decision-soft: #332711;
+    --good: #4CAF7C; --good-soft: #16281F; --bad: #E2564A; --bad-soft: #341D1B;
+    --role-client: #4CAF7C; --role-agent: #3FB2A4; --role-expert: #D97A88;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 32px -16px rgba(0,0,0,.6);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-ui);
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 { text-wrap: balance; margin: 0; }
+  button { font-family: inherit; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+  }
+
+  /* ============ Shell ============ */
+  #app { max-width: 1180px; margin: 0 auto; padding: 22px 24px 40px; }
+
+  .topbar {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 16px; padding-bottom: 16px; margin-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+  }
+  .wordmark { display: flex; align-items: baseline; gap: 10px; }
+  .wordmark .mark {
+    font-family: var(--font-display); font-size: 24px; font-weight: 600;
+    letter-spacing: .2px; color: var(--ink);
+  }
+  .wordmark .tag { font-size: 12.5px; color: var(--ink-muted); }
+  .proto-badge {
+    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .04em;
+    color: var(--ink-faint); border: 1px solid var(--border-strong);
+    border-radius: 3px; padding: 2px 6px; text-transform: uppercase;
+  }
+
+  .scenario-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+  .scenario-btn {
+    border: 1px solid var(--border-strong); background: var(--surface);
+    color: var(--ink-muted); border-radius: 999px; padding: 7px 14px;
+    font-size: 12.5px; cursor: pointer; transition: border-color .15s, color .15s, background .15s;
+  }
+  .scenario-btn:hover { border-color: var(--accent); color: var(--ink); }
+  .scenario-btn[aria-pressed="true"] {
+    background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600;
+  }
+
+  .layout { display: grid; grid-template-columns: 232px 1fr; gap: 28px; align-items: start; }
+  @media (max-width: 760px) { .layout { grid-template-columns: 1fr; } }
+
+  /* ============ Stepper rail ============ */
+  .rail { display: flex; flex-direction: column; gap: 2px; position: sticky; top: 20px; }
+  .rail-item {
+    display: flex; align-items: center; gap: 10px; padding: 9px 8px;
+    border-radius: 8px; cursor: default; border: 1px solid transparent;
+    color: var(--ink-faint); text-align: left; background: none; width: 100%;
+  }
+  .rail-item.reachable { cursor: pointer; color: var(--ink-muted); }
+  .rail-item.reachable:hover { background: var(--surface-2); }
+  .rail-item.active { background: var(--surface); border-color: var(--border); box-shadow: var(--shadow); color: var(--ink); }
+  .rail-dot {
+    width: 9px; height: 9px; border-radius: 50%; flex: none;
+    background: var(--ink-faint); position: relative;
+  }
+  .rail-item.done .rail-dot { background: var(--good); }
+  .rail-item.active .rail-dot { background: var(--role, var(--accent)); box-shadow: 0 0 0 3px color-mix(in srgb, var(--role, var(--accent)) 25%, transparent); }
+  .rail-item.failed .rail-dot { background: var(--bad); }
+  .rail-num { font-family: var(--font-mono); font-size: 10px; color: var(--ink-faint); width: 14px; flex: none; }
+  .rail-label { font-size: 12.5px; }
+  .rail-role { font-size: 9.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-faint); display: block; margin-top: 1px; }
+
+  /* ============ Main stage ============ */
+  .stage {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    box-shadow: var(--shadow); min-height: 460px; padding: 30px 34px;
+    display: flex; flex-direction: column;
+  }
+  .stage-eyebrow {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 4px;
+  }
+  .role-chip {
+    font-size: 10px; text-transform: uppercase; letter-spacing: .07em; font-weight: 700;
+    padding: 3px 8px; border-radius: 4px; color: white;
+  }
+  .role-chip.client { background: var(--role-client); }
+  .role-chip.agent { background: var(--role-agent); }
+  .role-chip.expert { background: var(--role-expert); }
+  .stage h2 {
+    font-family: var(--font-display); font-size: 24px; font-weight: 600; margin-top: 6px; margin-bottom: 4px;
+  }
+  .stage-sub { color: var(--ink-muted); font-size: 13px; margin-bottom: 22px; max-width: 62ch; }
+  .stage-body { flex: 1; }
+
+  /* ============ Reusable bits ============ */
+  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 20px; margin-bottom: 4px; }
+  .field-grid .full { grid-column: 1 / -1; }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  .field label { font-size: 11px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: .05em; }
+  .field .val { background: var(--surface-2); border: 1px solid var(--border); border-radius: 7px; padding: 9px 11px; font-size: 13px; }
+  .consent-row {
+    display: flex; align-items: center; gap: 9px; margin-top: 18px; padding: 11px 13px;
+    background: var(--accent-soft); border-radius: 8px; font-size: 12.5px; color: var(--ink);
+  }
+  .consent-row input { accent-color: var(--accent); width: 15px; height: 15px; }
+
+  .gate-list { display: flex; flex-direction: column; gap: 10px; }
+  .gate-item {
+    display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px;
+    border: 1px solid var(--border); border-radius: 9px; background: var(--surface);
+    opacity: 0; transform: translateY(4px); animation: gate-in .35s ease forwards;
+  }
+  @keyframes gate-in { to { opacity: 1; transform: none; } }
+  .gate-icon {
+    width: 20px; height: 20px; border-radius: 50%; flex: none; display: grid; place-items: center;
+    font-size: 12px; font-weight: 700; margin-top: 1px;
+  }
+  .gate-icon.pass { background: var(--good-soft); color: var(--good); }
+  .gate-icon.fail { background: var(--bad-soft); color: var(--bad); }
+  .gate-icon.flag { background: var(--decision-soft); color: var(--decision); }
+  .gate-name { font-weight: 600; font-size: 13px; }
+  .gate-reason { font-size: 12.5px; color: var(--ink-muted); margin-top: 2px; }
+
+  .decision-box {
+    margin-top: 4px; padding: 14px 16px; border: 1px solid var(--decision); border-radius: 9px;
+    background: var(--decision-soft);
+  }
+  .decision-box .lead { font-size: 13px; margin-bottom: 10px; }
+  .decision-actions { display: flex; gap: 10px; }
+  .btn { border-radius: 7px; padding: 9px 16px; font-size: 12.5px; font-weight: 600; cursor: pointer; border: 1px solid transparent; }
+  .btn-primary { background: var(--accent); color: var(--accent-ink); }
+  .btn-primary:hover { filter: brightness(1.06); }
+  .btn-outline { background: transparent; border-color: var(--border-strong); color: var(--ink); }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+  .btn:disabled { opacity: .4; cursor: not-allowed; }
+
+  .decline-card {
+    background: var(--bad-soft); border: 1px solid var(--bad); border-radius: 10px;
+    padding: 18px 20px; font-size: 13.5px; color: var(--ink);
+  }
+  .decline-card .head { color: var(--bad); font-weight: 700; font-size: 13px; margin-bottom: 6px; }
+
+  .section-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .section-card {
+    border: 1px solid var(--border); border-radius: 9px; padding: 12px 14px;
+    display: flex; flex-direction: column; gap: 6px; background: var(--surface);
+  }
+  .section-card .sid { font-family: var(--font-mono); font-size: 10px; color: var(--ink-faint); }
+  .section-card .stitle { font-size: 12.5px; font-weight: 600; }
+  .status-pill {
+    align-self: flex-start; font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .04em; padding: 3px 8px; border-radius: 999px;
+  }
+  .status-pill.queued { background: var(--surface-2); color: var(--ink-faint); }
+  .status-pill.working { background: var(--accent-soft); color: var(--accent); }
+  .status-pill.pass { background: var(--good-soft); color: var(--good); }
+  .status-pill.fail { background: var(--bad-soft); color: var(--bad); }
+  .status-pill.redraft { background: var(--decision-soft); color: var(--decision); }
+
+  .feedback-bubble {
+    border: 1px solid var(--border); border-left: 3px solid var(--role, var(--accent));
+    border-radius: 0 9px 9px 0; padding: 12px 14px; font-size: 13px; background: var(--surface-2);
+    margin-bottom: 14px;
+  }
+  .feedback-bubble .who { font-size: 10.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-faint); margin-bottom: 4px; }
+
+  .round-track { display: flex; gap: 5px; margin-bottom: 16px; }
+  .round-dot { width: 22px; height: 4px; border-radius: 999px; background: var(--border-strong); }
+  .round-dot.filled { background: var(--role-client); }
+
+  .ship-list { display: flex; flex-direction: column; gap: 8px; margin: 6px 0 18px; }
+  .ship-row {
+    display: flex; align-items: center; gap: 10px; padding: 10px 13px;
+    border: 1px solid var(--border); border-radius: 8px; font-size: 12.5px; background: var(--surface-2);
+    font-family: var(--font-mono);
+  }
+  .ship-row .fname { flex: 1; }
+  .ship-row .ftag { font-size: 10px; text-transform: uppercase; color: var(--ink-faint); font-family: var(--font-ui); }
+
+  .audit-line {
+    font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-muted);
+    background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px;
+    padding: 12px 14px; white-space: pre-wrap; line-height: 1.6;
+  }
+
+  .disclaimer { font-size: 11px; color: var(--ink-faint); margin-top: 20px; max-width: 68ch; }
+
+  .stage-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 28px; }
+  .restart-link { font-size: 12px; color: var(--ink-faint); background: none; border: none; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+
+  /* Deep-link capture mode (?clean=1) -- hides chrome not meaningful in a static screenshot */
+  #app[data-clean="1"] .scenario-row,
+  #app[data-clean="1"] .stage-nav,
+  #app[data-clean="1"] .proto-badge { display: none; }
+  #app[data-clean="1"] .gate-item { animation: none !important; opacity: 1; transform: none; }
+</style>
+
+<div id="app">
+  <div class="topbar">
+    <div class="wordmark">
+      <span class="mark">APProved</span>
+      <span class="tag">EU MDR technical documentation, drafted and reviewed</span>
+    </div>
+    <span class="proto-badge">Interactive prototype</span>
+  </div>
+
+  <div class="scenario-row" id="scenarioRow"></div>
+
+  <div class="layout">
+    <nav class="rail" id="rail" aria-label="Pipeline steps"></nav>
+    <main class="stage" id="stage"></main>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ============ Content: grounded in the real APProved pipeline ============ */
+  const SCENARIOS = {
+    happy: {
+      label: "Happy path — CGM sensor",
+      outcome: "happy",
+      client: {
+        device_name: "GlucoSense CGM",
+        manufacturer: "Veridian Diagnostics",
+        intended_purpose: "Continuous, real-time monitoring of interstitial glucose in adults with diabetes, to support treatment decisions.",
+        device_description: "Wearable, skin-adhered biosensor with a disposable filament and reusable transmitter, worn on the upper arm for up to 14 days; measures interstitial glucose every 5 minutes via Bluetooth to a companion app.",
+        clinical: "Phase III pivotal trial, 312 adults, 14-day wear period, MARD 8.7% vs. reference venous glucose.",
+        risk: "Skin irritation, transmission dropout, calibration drift — mitigated by hypoallergenic adhesive, Bluetooth retry logic, and a 24-hour warm-up calibration.",
+        declared_class: "IIb",
+        target_market: "EU",
+      },
+      gates: [
+        { name: "Consent to audit trail", state: "pass", reason: "Given at upload." },
+        { name: "Scope check", state: "pass", reason: "Eligible EU MDR medical device — CE-marking applies." },
+        { name: "Data quality check", state: "pass", reason: "All required fields present; 3.1% missing in pivotal-trial patient records, under the 15% threshold." },
+        { name: "Classification plausibility", state: "pass", reason: "Declared Class IIb is consistent with the device description." },
+      ],
+    },
+    scope_reject: {
+      label: "Declined — pharmaceutical",
+      outcome: "reject",
+      client: {
+        device_name: "GlucoRegin XR",
+        manufacturer: "Halden Biosciences",
+        intended_purpose: "Once-daily oral tablet for glycemic control in adults with type 2 diabetes.",
+        device_description: "Extended-release tablet, 500mg dual-receptor agonist active pharmaceutical ingredient, once daily with food.",
+        clinical: "Phase III trial, 640 adults, HbA1c reduction endpoint.",
+        risk: "GI tolerability, hypoglycemia risk in combination therapy.",
+        declared_class: "—",
+        target_market: "EU",
+      },
+      gates: [
+        { name: "Consent to audit trail", state: "pass", reason: "Given at upload." },
+        { name: "Scope check", state: "fail",
+          reason: "This describes a drug product — a dosage form and active pharmaceutical ingredient. That falls under medicines regulation, not EU MDR CE-marking." },
+      ],
+      declineTitle: "We can't draft this one",
+      declineBody: "GlucoRegin XR reads as a pharmaceutical product, not a medical device. EU MDR CE-marking doesn't apply — you'd need a medicines-agency marketing authorisation instead. We're not the right service for this filing, and we didn't want to draft you a document that a notified body would reject on scope alone.",
+    },
+    quality_reject: {
+      label: "Declined — incomplete data",
+      outcome: "reject",
+      client: {
+        device_name: "GlucoSense CGM — Pilot Cohort",
+        manufacturer: "Veridian Diagnostics",
+        intended_purpose: "Continuous, real-time monitoring of interstitial glucose in adults with diabetes, to support treatment decisions.",
+        device_description: "Wearable, skin-adhered biosensor with a disposable filament and reusable transmitter, worn on the upper arm for up to 14 days.",
+        clinical: "Phase III pivotal trial, 180 adults — partial dataset.",
+        risk: "Skin irritation, transmission dropout, calibration drift.",
+        declared_class: "IIb",
+        target_market: "EU",
+      },
+      gates: [
+        { name: "Consent to audit trail", state: "pass", reason: "Given at upload." },
+        { name: "Scope check", state: "pass", reason: "Eligible EU MDR medical device." },
+        { name: "Data quality check", state: "fail",
+          reason: "22% of patient records in the pivotal-trial dataset are missing reference glucose values — over our 15% threshold." },
+      ],
+      declineTitle: "We need complete pivotal-trial data first",
+      declineBody: "22% of the patient-level records in your Phase III dataset are missing reference glucose values. We can't draft an accurate clinical evaluation section on incomplete data — please resend once the dataset is complete, or let us know if you'd rather discuss a literature/equivalence-based pathway instead.",
+    },
+    classification_flag: {
+      label: "Classification flagged",
+      outcome: "flag",
+      client: {
+        device_name: "CardioPace ICD-7",
+        manufacturer: "Meridian Cardiac Systems",
+        intended_purpose: "Detects and treats life-threatening ventricular arrhythmias via implanted electrical therapy.",
+        device_description: "Active implantable pulse generator, placed subcutaneously and connected to intracardiac leads, that continuously monitors cardiac rhythm and delivers pacing, cardioversion, or defibrillation to sustain a vital physiological function.",
+        clinical: "Phase III pivotal trial, 214 adults, 24-month freedom-from-complication endpoint.",
+        risk: "Lead dislodgement, infection at implant site, inappropriate shock — mitigated by fixation design, sterile procedure protocol, and rhythm-discrimination algorithms.",
+        declared_class: "IIb",
+        target_market: "EU",
+      },
+      gates: [
+        { name: "Consent to audit trail", state: "pass", reason: "Given at upload." },
+        { name: "Scope check", state: "pass", reason: "Eligible EU MDR medical device." },
+        { name: "Data quality check", state: "pass", reason: "All required fields present; 4.4% missing in pivotal-trial records." },
+        { name: "Classification plausibility", state: "flag",
+          reason: "The description reads like an active implantable, life-sustaining device — typically Class III under EU MDR Annex VIII Rule 8. Declared class is IIb." },
+      ],
+    },
+  };
+
+  const SECTIONS = [
+    { id: "sec-1", title: "1. Device Description and Specification" },
+    { id: "sec-2", title: "2. GSPR Checklist" },
+    { id: "sec-3", title: "3. Risk Management Summary" },
+    { id: "sec-4", title: "4. Clinical Evaluation Summary" },
+    { id: "sec-5", title: "5. Labeling and Instructions for Use" },
+    { id: "sec-6", title: "6. Post-Market Surveillance Plan" },
+  ];
+
+  const STEPS_FULL = [
+    { id: "upload", label: "Client uploads device data", role: "client" },
+    { id: "gates", label: "Intake gates", role: "agent" },
+    { id: "regulation", label: "Fetch current EU MDR", role: "agent" },
+    { id: "drafting", label: "Draft 6 sections in parallel", role: "agent" },
+    { id: "judge", label: "Automated compliance check", role: "agent" },
+    { id: "expert", label: "Internal expert review", role: "expert" },
+    { id: "client_review", label: "Client review", role: "client" },
+    { id: "shipped", label: "Shipped", role: "agent" },
+  ];
+  const STEPS_REJECT = [
+    { id: "upload", label: "Client uploads device data", role: "client" },
+    { id: "gates", label: "Intake gates", role: "agent" },
+    { id: "declined", label: "Declined, respectfully", role: "agent" },
+  ];
+
+  /* ============ State ============ */
+  let scenarioId = "happy";
+  let stepIndex = 0;
+  let furthest = 0;
+  let classificationDecision = null;   // 'RECLASSIFY' | 'KEEP'
+  let judgeRound = 0;                  // 0 = first pass, 1 = after one redraft
+  let clientRound = 1;
+
+  function scenario() { return SCENARIOS[scenarioId]; }
+  function steps() { return scenario().outcome === "reject" ? STEPS_REJECT : STEPS_FULL; }
+
+  function selectScenario(id) {
+    scenarioId = id;
+    stepIndex = 0;
+    furthest = 0;
+    classificationDecision = null;
+    judgeRound = 0;
+    clientRound = 1;
+    render();
+  }
+
+  function goTo(i) {
+    if (i > furthest) return;
+    stepIndex = i;
+    render();
+  }
+  function next() {
+    stepIndex = Math.min(stepIndex + 1, steps().length - 1);
+    furthest = Math.max(furthest, stepIndex);
+    render();
+  }
+  function back() {
+    stepIndex = Math.max(stepIndex - 1, 0);
+    render();
+  }
+
+  /* ============ Chrome: scenario picker + rail ============ */
+  function renderScenarioRow() {
+    const row = document.getElementById("scenarioRow");
+    row.innerHTML = "";
+    Object.keys(SCENARIOS).forEach((id) => {
+      const b = document.createElement("button");
+      b.className = "scenario-btn";
+      b.type = "button";
+      b.textContent = SCENARIOS[id].label;
+      b.setAttribute("aria-pressed", id === scenarioId ? "true" : "false");
+      b.addEventListener("click", () => selectScenario(id));
+      row.appendChild(b);
+    });
+  }
+
+  function renderRail() {
+    const rail = document.getElementById("rail");
+    rail.innerHTML = "";
+    steps().forEach((s, i) => {
+      const item = document.createElement("button");
+      item.type = "button";
+      const done = i < stepIndex || (s.id === "declined" && i === stepIndex);
+      const active = i === stepIndex;
+      const failedTerminal = s.id === "declined" && i === stepIndex;
+      item.className = "rail-item" + (i <= furthest ? " reachable" : "") +
+        (active ? " active" : done ? " done" : "") + (failedTerminal ? " failed" : "");
+      item.style.setProperty("--role", `var(--role-${s.role})`);
+      item.disabled = i > furthest;
+      item.innerHTML = `
+        <span class="rail-num">${String(i + 1).padStart(2, "0")}</span>
+        <span class="rail-dot"></span>
+        <span>
+          <span class="rail-label">${s.label}</span>
+          <span class="rail-role">${s.role}</span>
+        </span>`;
+      item.addEventListener("click", () => goTo(i));
+      rail.appendChild(item);
+    });
+  }
+
+  /* ============ Step renderers ============ */
+  function eyebrow(role, text) {
+    return `<div class="stage-eyebrow">
+      <span class="role-chip ${role}">${role}</span>
+      <span style="font-size:11.5px;color:var(--ink-faint)">${text}</span>
+    </div>`;
+  }
+
+  function renderUpload() {
+    const c = scenario().client;
+    return `
+      ${eyebrow("client", "Step 1 of " + steps().length)}
+      <h2>Upload device data</h2>
+      <div class="stage-sub">The client sends everything APProved needs to start: what the device is, what it's for, and the clinical evidence behind it.</div>
+      <div class="stage-body">
+        <div class="field-grid">
+          <div class="field"><label>Device name</label><div class="val">${c.device_name}</div></div>
+          <div class="field"><label>Manufacturer</label><div class="val">${c.manufacturer}</div></div>
+          <div class="field full"><label>Intended purpose</label><div class="val">${c.intended_purpose}</div></div>
+          <div class="field full"><label>Device description</label><div class="val">${c.device_description}</div></div>
+          <div class="field"><label>Clinical data summary</label><div class="val">${c.clinical}</div></div>
+          <div class="field"><label>Risk summary</label><div class="val">${c.risk}</div></div>
+          <div class="field"><label>Declared class</label><div class="val">${c.declared_class}</div></div>
+          <div class="field"><label>Target market</label><div class="val">${c.target_market}</div></div>
+        </div>
+        <div class="consent-row">
+          <input type="checkbox" checked disabled id="consentBox">
+          <label for="consentBox">I consent to APProved keeping a full audit-trail record of this submission.</label>
+        </div>
+      </div>`;
+  }
+
+  function renderGates() {
+    const s = scenario();
+    let html = `
+      ${eyebrow("agent", "Step 2 of " + steps().length)}
+      <h2>Intake gates</h2>
+      <div class="stage-sub">Nothing gets drafted until the request clears every gate. A decline here is fast, specific, and respectful — not a wall of silence.</div>
+      <div class="stage-body">
+        <div class="gate-list">`;
+    s.gates.forEach((g, i) => {
+      const icon = g.state === "pass" ? "✓" : g.state === "fail" ? "✕" : "!";
+      html += `
+        <div class="gate-item" style="animation-delay:${i * 140}ms">
+          <span class="gate-icon ${g.state === "flag" ? "flag" : g.state}">${icon}</span>
+          <div>
+            <div class="gate-name">${g.name}</div>
+            <div class="gate-reason">${g.reason}</div>
+          </div>
+        </div>`;
+    });
+    html += `</div>`;
+
+    if (s.outcome === "flag") {
+      if (!classificationDecision) {
+        html += `
+          <div class="decision-box">
+            <div class="lead"><strong>This needs a human decision.</strong> APProved never silently reclassifies a device — it asks the regulatory expert and waits.</div>
+            <div class="decision-actions">
+              <button class="btn btn-primary" id="btnReclassify">Reclassify to Class III</button>
+              <button class="btn btn-outline" id="btnKeep">Keep as declared (Class IIb)</button>
+            </div>
+          </div>`;
+      } else {
+        const chosen = classificationDecision === "RECLASSIFY"
+          ? "Reclassified to Class III. Every document header and the audit trail reflect this from here on."
+          : "Kept as declared, Class IIb — the expert's call, logged to the audit trail.";
+        html += `
+          <div class="gate-item" style="animation-delay:0ms">
+            <span class="gate-icon pass">✓</span>
+            <div><div class="gate-name">Classification resolved</div><div class="gate-reason">${chosen}</div></div>
+          </div>`;
+      }
+    }
+    html += `</div>`;
+    return html;
+  }
+
+  function renderDeclined() {
+    const s = scenario();
+    return `
+      ${eyebrow("agent", "Step 3 of " + steps().length)}
+      <h2>Declined, respectfully</h2>
+      <div class="stage-sub">The run stops here — no document is drafted, and the reason is specific enough to act on.</div>
+      <div class="stage-body">
+        <div class="decline-card">
+          <div class="head">${s.declineTitle}</div>
+          <div>${s.declineBody}</div>
+        </div>
+        <div class="disclaimer">This decline was logged to a timestamped audit trail the moment it happened — every gate a request passes or fails is recorded, not just the ones that succeed.</div>
+      </div>`;
+  }
+
+  function renderRegulation() {
+    return `
+      ${eyebrow("agent", "Step 3 of " + steps().length)}
+      <h2>Fetch current EU MDR</h2>
+      <div class="stage-sub">Drafting never runs against a stale, hardcoded snapshot of the regulation.</div>
+      <div class="stage-body">
+        <div class="gate-list">
+          <div class="gate-item"><span class="gate-icon pass">✓</span><div><div class="gate-name">Live fetch — eumdr.com</div><div class="gate-reason">Current amendments and MDCG guidance updates.</div></div></div>
+          <div class="gate-item" style="animation-delay:140ms"><span class="gate-icon pass">✓</span><div><div class="gate-name">Local reference — Annexes I/II/III/XIV</div><div class="gate-reason">Condensed, accurate baseline text, combined with the live fetch.</div></div></div>
+        </div>
+      </div>`;
+  }
+
+  function renderDrafting() {
+    let html = `
+      ${eyebrow("agent", "Step 4 of " + steps().length)}
+      <h2>Draft six sections — in parallel</h2>
+      <div class="stage-sub">EU MDR's Annex II/III structure is fixed and known in advance, so each section is one independent, concurrent LLM call.</div>
+      <div class="stage-body"><div class="section-grid">`;
+    SECTIONS.forEach((sec) => {
+      html += `
+        <div class="section-card">
+          <span class="sid">${sec.id}</span>
+          <span class="stitle">${sec.title}</span>
+          <span class="status-pill pass">Drafted</span>
+        </div>`;
+    });
+    html += `</div></div>`;
+    return html;
+  }
+
+  function renderJudge() {
+    let html = `
+      ${eyebrow("agent", "Step 5 of " + steps().length)}
+      <h2>Automated compliance check</h2>
+      <div class="stage-sub">An LLM-as-judge scores every section before a person ever sees it: cites the right Annex/Article, traces every claim to real device data, no contradictions with the declared class.</div>
+      <div class="stage-body"><div class="section-grid">`;
+    SECTIONS.forEach((sec, i) => {
+      const firstPassFail = i === 3 && judgeRound === 0;
+      const pill = firstPassFail ? '<span class="status-pill fail">Fail — flagged</span>' :
+        (i === 3 ? '<span class="status-pill pass">Pass — redrafted</span>' : '<span class="status-pill pass">Pass</span>');
+      html += `
+        <div class="section-card">
+          <span class="sid">${sec.id}</span>
+          <span class="stitle">${sec.title}</span>
+          ${pill}
+        </div>`;
+    });
+    html += `</div>`;
+    if (judgeRound === 0) {
+      html += `
+        <div class="decision-box" style="border-color:var(--border-strong);background:var(--surface-2)">
+          <div class="lead"><strong>Clinical Evaluation Summary flagged:</strong> a claim wasn't traced back to the provided clinical data. Redrafting that section only — not the whole document.</div>
+          <div class="decision-actions"><button class="btn btn-primary" id="btnRedraft">Redraft flagged section</button></div>
+        </div>`;
+    }
+    html += `</div>`;
+    return html;
+  }
+
+  function renderExpert() {
+    return `
+      ${eyebrow("expert", "Step 6 of " + steps().length)}
+      <h2>Internal expert review</h2>
+      <div class="stage-sub">One regulatory-expert QA pass before the client ever sees a draft.</div>
+      <div class="stage-body">
+        <div class="feedback-bubble" style="--role:var(--role-expert)">
+          <div class="who">Regulatory expert · round 1</div>
+          Add a clearer risk–benefit statement referencing GSPR 1 and 8, and cite the specific Annex clause more precisely.
+        </div>
+        <div class="gate-item"><span class="gate-icon pass">✓</span><div><div class="gate-name">Validated</div><div class="gate-reason">Feedback applied, section redrafted, expert signed off.</div></div></div>
+      </div>`;
+  }
+
+  function renderClientReview() {
+    const dots = Array.from({ length: 5 }, (_, i) => `<span class="round-dot${i < clientRound ? " filled" : ""}"></span>`).join("");
+    let html = `
+      ${eyebrow("client", "Step 7 of " + steps().length)}
+      <h2>Client review</h2>
+      <div class="stage-sub">Up to 5 rounds of client feedback. Every round is logged; a decline after round 5 routes to a scheduled call, never a dead end.</div>
+      <div class="stage-body">
+        <div class="round-track">${dots}</div>`;
+    if (clientRound === 1) {
+      html += `
+        <div class="feedback-bubble" style="--role:var(--role-client)">
+          <div class="who">Client · round 1</div>
+          Can you simplify the Labeling section? Our clinical staff found the current draft too technical for the quick-reference card.
+        </div>
+        <div class="decision-actions">
+          <button class="btn btn-primary" id="btnClientRound2">Apply feedback → round 2</button>
+        </div>`;
+    } else {
+      html += `
+        <div class="gate-item"><span class="gate-icon pass">✓</span><div><div class="gate-name">Accepted</div><div class="gate-reason">Client approved on round 2 — well inside the 5-round cap.</div></div></div>`;
+    }
+    html += `</div>`;
+    return html;
+  }
+
+  function renderShipped() {
+    return `
+      ${eyebrow("agent", "Step 8 of " + steps().length)}
+      <h2>Shipped</h2>
+      <div class="stage-sub">Every snapshot is kept — not just the final file.</div>
+      <div class="stage-body">
+        <div class="ship-list">
+          <div class="ship-row"><span class="fname">01_draft_pre_expert.docx</span><span class="ftag">pre-expert</span></div>
+          <div class="ship-row"><span class="fname">02_expert_validated.docx</span><span class="ftag">post-expert</span></div>
+          <div class="ship-row"><span class="fname">03_FINAL_shipped.docx</span><span class="ftag">final</span></div>
+        </div>
+        <div class="audit-line">audit: 4 gate checks · ${scenario().outcome === "flag" ? "1 classification review · " : ""}1 compliance redraft · 2 client rounds
+recorded to audit_glucosense-cgm_2026-08-14T19-02-11.842331.audit.json + .txt</div>
+        <div class="disclaimer">This walkthrough uses APProved's real pipeline logic and messaging. Documents shown above are representative — this prototype doesn't generate live files in the browser.</div>
+      </div>`;
+  }
+
+  function renderStepBody() {
+    const id = steps()[stepIndex].id;
+    switch (id) {
+      case "upload": return renderUpload();
+      case "gates": return renderGates();
+      case "declined": return renderDeclined();
+      case "regulation": return renderRegulation();
+      case "drafting": return renderDrafting();
+      case "judge": return renderJudge();
+      case "expert": return renderExpert();
+      case "client_review": return renderClientReview();
+      case "shipped": return renderShipped();
+      default: return "";
+    }
+  }
+
+  function wireStepInteractions() {
+    const btnReclassify = document.getElementById("btnReclassify");
+    const btnKeep = document.getElementById("btnKeep");
+    if (btnReclassify) btnReclassify.addEventListener("click", () => { classificationDecision = "RECLASSIFY"; render(); });
+    if (btnKeep) btnKeep.addEventListener("click", () => { classificationDecision = "KEEP"; render(); });
+
+    const btnRedraft = document.getElementById("btnRedraft");
+    if (btnRedraft) btnRedraft.addEventListener("click", () => { judgeRound = 1; render(); });
+
+    const btnClientRound2 = document.getElementById("btnClientRound2");
+    if (btnClientRound2) btnClientRound2.addEventListener("click", () => { clientRound = 2; render(); });
+  }
+
+  function isStepBlocked() {
+    const id = steps()[stepIndex].id;
+    if (id === "gates") {
+      const s = scenario();
+      if (s.outcome === "flag" && !classificationDecision) return true;
+    }
+    return false;
+  }
+
+  function renderNav() {
+    const s = steps();
+    const isLast = stepIndex === s.length - 1;
+    const isTerminalDecline = s[stepIndex].id === "declined";
+    return `
+      <div class="stage-nav">
+        <button class="btn btn-outline" id="btnBack" ${stepIndex === 0 ? "disabled" : ""}>← Back</button>
+        <button class="restart-link" id="btnRestart">Restart this scenario</button>
+        ${isLast || isTerminalDecline
+          ? `<span></span>`
+          : `<button class="btn btn-primary" id="btnNext" ${isStepBlocked() ? "disabled" : ""}>Next →</button>`}
+      </div>`;
+  }
+
+  function render() {
+    renderScenarioRow();
+    renderRail();
+    const stage = document.getElementById("stage");
+    stage.innerHTML = renderStepBody() + renderNav();
+    wireStepInteractions();
+    document.getElementById("btnBack").addEventListener("click", back);
+    document.getElementById("btnRestart").addEventListener("click", () => selectScenario(scenarioId));
+    const btnNext = document.getElementById("btnNext");
+    if (btnNext) btnNext.addEventListener("click", next);
+  }
+
+  // Optional deep-link support (?scenario=happy&step=3&judgeRound=1&clientRound=2&decision=RECLASSIFY)
+  // -- purely additive, used for capturing static screenshots of a specific
+  // state; normal interactive use never sets these params.
+  (function applyDeepLink() {
+    const p = new URLSearchParams(window.location.search);
+    if (!p.has("scenario")) return;
+    const sid = p.get("scenario");
+    if (SCENARIOS[sid]) scenarioId = sid;
+    const step = parseInt(p.get("step"), 10);
+    if (!isNaN(step)) { stepIndex = step; furthest = step; }
+    if (p.get("decision")) classificationDecision = p.get("decision");
+    if (p.get("judgeRound")) judgeRound = parseInt(p.get("judgeRound"), 10);
+    if (p.get("clientRound")) clientRound = parseInt(p.get("clientRound"), 10);
+    if (p.get("clean") === "1") {
+      document.getElementById("app").dataset.clean = "1";
+    }
+  })();
+
+  render();
+})();
+</script>

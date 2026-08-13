@@ -1,0 +1,55 @@
+.list {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  margin: 0 0 28px;
+  padding: 0;
+}
+.item {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+.item:last-child {
+  flex: 0;
+}
+.dot {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--surface-2);
+  color: var(--ink-muted);
+  border: 1.5px solid var(--border-strong);
+}
+.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+.done {
+  background: var(--good);
+  border-color: var(--good);
+  color: #fff;
+}
+.label {
+  font-size: 11.5px;
+  color: var(--ink-faint);
+  margin-left: 8px;
+  white-space: nowrap;
+}
+.activeLabel {
+  color: var(--ink);
+  font-weight: 600;
+}
+.connector {
+  flex: 1;
+  height: 1.5px;
+  background: var(--border-strong);
+  margin: 0 12px;
+}

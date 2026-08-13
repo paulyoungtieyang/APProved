@@ -20,6 +20,26 @@ export const HELP_CONTENT: Record<string, { title: string; body: string }> = {
     title: "Settings",
     body: "Manage roles and permissions. Field-facing roles can't modify approved medical or scientific text — changes go through Compliance Officer review.",
   },
+  "/policy-news": {
+    title: "Policy News",
+    body: "Regulatory and policy updates from the authorities relevant to your markets. Filter by region to focus on what affects your submissions.",
+  },
+  "/global-value-dossier": {
+    title: "Global Value Dossier",
+    body: "Configure a therapeutic area, market, language, and tender type, choose which sections to include, then generate a draft value dossier.",
+  },
+  "/msl-materials": {
+    title: "MSL Materials",
+    body: "Choose a material type, set tone, audience, and brand voice, then generate a draft for Medical Science Liaison field use.",
+  },
+  "/resources": {
+    title: "Resources",
+    body: "Regulatory, legal, and security reference material, organized into three resource centers.",
+  },
+  "/submit": {
+    title: "Submit",
+    body: "A five-step wizard that walks a project from details through compliance checks to final submission.",
+  },
 };
 
 export const DEFAULT_HELP = {

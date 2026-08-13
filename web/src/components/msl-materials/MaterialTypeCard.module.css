@@ -1,0 +1,34 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  text-align: left;
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  color: inherit;
+}
+.card:hover {
+  border-color: var(--accent);
+}
+.selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.icon {
+  font-size: 18px;
+  color: var(--accent);
+}
+.label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.desc {
+  font-size: 11.5px;
+  color: var(--ink-muted);
+}

@@ -9,14 +9,17 @@ export function WizardSteps({ currentIndex }: { currentIndex: number }) {
         const active = i === currentIndex;
         return (
           <li key={step.id} className={styles.item}>
-            <span
-              className={`${styles.dot} ${done ? styles.done : ""} ${active ? styles.active : ""}`}
-            >
-              {done ? "✓" : i + 1}
-            </span>
-            <span className={`${styles.label} ${active ? styles.activeLabel : ""}`}>
-              {step.label}
-            </span>
+            <div className={styles.stepCol}>
+              <span
+                className={`${styles.dot} ${done ? styles.done : ""} ${active ? styles.active : ""}`}
+              >
+                {done ? "✓" : i + 1}
+              </span>
+              <span className={`${styles.label} ${active ? styles.activeLabel : ""}`}>
+                {step.label}
+              </span>
+              <span className={styles.subtitle}>{step.subtitle}</span>
+            </div>
             {i < WIZARD_STEPS.length - 1 && <span className={styles.connector} />}
           </li>
         );

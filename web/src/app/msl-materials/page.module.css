@@ -16,6 +16,10 @@
 .generateRow {
   margin-top: 16px;
 }
+.generateBtn {
+  width: 100%;
+  text-align: center;
+}
 .errorText {
   color: var(--bad);
   font-size: 12.5px;

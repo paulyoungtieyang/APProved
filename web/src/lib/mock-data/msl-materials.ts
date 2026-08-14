@@ -3,36 +3,41 @@ export interface MaterialType {
   label: string;
   icon: string;
   description: string;
+  estGenerationTime: string;
 }
 
 export const MATERIAL_TYPES: MaterialType[] = [
   {
-    id: "slide-deck",
-    label: "Slide Deck",
+    id: "scientific-slide-deck",
+    label: "Scientific Slide Deck",
     icon: "▭",
-    description: "Presentation-ready scientific overview for field discussions",
+    description: "Comprehensive presentation with clinical data and key messages",
+    estGenerationTime: "5-7 min",
   },
   {
-    id: "faq-document",
-    label: "FAQ Document",
+    id: "medical-summary-document",
+    label: "Medical Summary Document",
+    icon: "▤",
+    description: "Concise summary of efficacy, safety, and clinical value",
+    estGenerationTime: "3-5 min",
+  },
+  {
+    id: "scientific-faq",
+    label: "Scientific FAQ",
     icon: "?",
-    description: "Anticipated questions and approved responses",
+    description: "Frequently asked questions with evidence-based responses",
+    estGenerationTime: "4-6 min",
   },
   {
-    id: "objection-handling",
-    label: "Objection-Handling Guide",
-    icon: "⇄",
-    description: "Common pushback scenarios with evidence-backed responses",
-  },
-  {
-    id: "competitive-landscape",
-    label: "Competitive Landscape Summary",
-    icon: "◫",
-    description: "Positioning versus comparator products and standards of care",
+    id: "email-response-templates",
+    label: "Email Response Templates",
+    icon: "✉",
+    description: "Pre-written responses to common medical inquiries",
+    estGenerationTime: "2-3 min",
   },
 ];
 
-export const MATERIAL_TONES = ["Clinical / Technical", "Conversational", "Executive Summary"];
+export const MATERIAL_TONES = ["Scientific", "Balanced", "Accessible"];
 
 export const MATERIAL_AUDIENCES = [
   "HCP — Specialist",
@@ -41,8 +46,10 @@ export const MATERIAL_AUDIENCES = [
   "Internal Sales Team",
 ];
 
-export const BRAND_VOICES = [
-  "Standard APProved Voice",
-  "Client Custom Voice A",
-  "Client Custom Voice B",
+export const FOCUS_AREAS = [
+  "Efficacy & Clinical Outcomes",
+  "Safety & Tolerability",
+  "Mechanism of Action",
+  "Patient Selection & Eligibility",
+  "Competitive Positioning",
 ];

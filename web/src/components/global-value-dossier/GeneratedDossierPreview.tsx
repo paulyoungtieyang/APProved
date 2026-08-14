@@ -6,13 +6,13 @@ export function GeneratedDossierPreview({
   therapeuticArea,
   market,
   language,
-  tenderType,
+  outputFormat,
   markdown,
 }: {
   therapeuticArea: string;
   market: string;
   language: string;
-  tenderType: string;
+  outputFormat: string;
   markdown: string;
 }) {
   return (
@@ -22,7 +22,7 @@ export function GeneratedDossierPreview({
         {therapeuticArea} Global Value Dossier — {market}
       </h3>
       <p className={styles.subline}>
-        {language} · {tenderType}
+        {language} · {outputFormat}
       </p>
       <div className={styles.body}>
         <MarkdownView markdown={markdown} />

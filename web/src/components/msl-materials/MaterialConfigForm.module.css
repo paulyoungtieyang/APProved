@@ -1,5 +1,80 @@
-.grid {
+.wrap {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-muted);
+}
+.toneRow {
+  display: flex;
+  gap: 8px;
+}
+.toneBtn {
+  flex: 1;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 9px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.toneBtnActive {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+.textarea {
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  padding: 10px 12px;
+  font-size: 13px;
+  font-family: var(--font-ui);
+  resize: vertical;
+}
+.textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+.brandSection {
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.brandTitle {
+  font-size: 13px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--ink);
+}
+.uploadRow {
+  display: flex;
+  gap: 8px;
+}
+.input {
+  flex: 1;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink-faint);
+  padding: 8px 10px;
+  font-size: 13px;
+  font-family: var(--font-ui);
+}
+.hint {
+  font-size: 11px;
+  color: var(--ink-faint);
 }

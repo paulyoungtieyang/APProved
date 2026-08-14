@@ -1,6 +1,6 @@
 .list {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   list-style: none;
   margin: 0 0 28px;
   padding: 0;
@@ -13,10 +13,19 @@
 .item:last-child {
   flex: 0;
 }
+.stepCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  width: 108px;
+  text-align: center;
+}
 .dot {
   flex-shrink: 0;
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -38,18 +47,23 @@
   color: #fff;
 }
 .label {
-  font-size: 11.5px;
+  font-size: 12px;
+  font-weight: 600;
   color: var(--ink-faint);
-  margin-left: 8px;
-  white-space: nowrap;
 }
 .activeLabel {
   color: var(--ink);
-  font-weight: 600;
+}
+.subtitle {
+  font-size: 10.5px;
+  color: var(--ink-faint);
+  line-height: 1.3;
 }
 .connector {
   flex: 1;
   height: 1.5px;
   background: var(--border-strong);
-  margin: 0 12px;
+  margin: 0 4px;
+  align-self: flex-start;
+  margin-top: 14px;
 }

@@ -7,6 +7,7 @@ export const THERAPEUTIC_AREAS = [
 ];
 
 export const DOSSIER_MARKETS = [
+  "Global (All Regions)",
   "United States",
   "European Union",
   "Japan",
@@ -24,6 +25,8 @@ export const TENDER_TYPES = [
   "Private Payer",
 ];
 
+export const OUTPUT_FORMATS = ["PDF", "Word (DOCX)", "PowerPoint (PPTX)"];
+
 export interface DossierSection {
   id: string;
   label: string;
@@ -31,12 +34,12 @@ export interface DossierSection {
 }
 
 export const DOSSIER_SECTIONS: DossierSection[] = [
-  { id: "executive-summary", label: "Executive Summary", description: "High-level product and value narrative" },
-  { id: "disease-burden", label: "Disease Burden & Epidemiology", description: "Prevalence, incidence, and unmet need" },
-  { id: "product-overview", label: "Product Overview", description: "Indication, mechanism, and intended use" },
-  { id: "clinical-evidence", label: "Clinical Evidence Summary", description: "Pivotal trial results and endpoints" },
-  { id: "economic-impact", label: "Economic / Budget Impact Model", description: "Cost offsets and budget impact projections" },
-  { id: "comparative-effectiveness", label: "Comparative Effectiveness", description: "Head-to-head and indirect comparisons" },
-  { id: "patient-outcomes", label: "Patient-Reported Outcomes", description: "Quality-of-life and PRO instrument data" },
-  { id: "payer-hta", label: "Payer / HTA Considerations", description: "Prior HTA decisions and payer positioning" },
+  { id: "executive-summary", label: "Executive Summary", description: "High-level overview of clinical value proposition" },
+  { id: "disease-epidemiology", label: "Disease & Epidemiology", description: "Disease burden, prevalence, and unmet medical needs" },
+  { id: "clinical-efficacy", label: "Clinical Efficacy Data", description: "Phase 3 trial results, endpoints, and statistical analysis" },
+  { id: "safety-tolerability", label: "Safety & Tolerability", description: "Adverse events, safety profile, and risk-benefit analysis" },
+  { id: "pharmacoeconomic-analysis", label: "Pharmacoeconomic Analysis", description: "Cost-effectiveness, budget impact, and economic value" },
+  { id: "quality-of-life", label: "Quality of Life Outcomes", description: "Patient-reported outcomes and quality of life assessments" },
+  { id: "comparative-effectiveness", label: "Comparative Effectiveness", description: "Comparison with current standard of care and competitors" },
+  { id: "target-population", label: "Target Population", description: "Patient population, inclusion criteria, and treatment eligibility" },
 ];

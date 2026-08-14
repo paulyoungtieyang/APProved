@@ -58,3 +58,6 @@
   font-size: 12px;
   flex-shrink: 0;
 }
+.submitRow {
+  margin-top: 16px;
+}

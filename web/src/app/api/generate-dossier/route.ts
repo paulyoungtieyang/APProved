@@ -9,7 +9,8 @@ interface GenerateDossierRequest {
   therapeuticArea: string;
   market: string;
   language: string;
-  tenderType: string;
+  outputFormat: string;
+  regionalTenderSpec?: string;
   sectionIds: string[];
   provider?: "claude" | "openai";
   apiKey?: string;
@@ -28,13 +29,14 @@ export async function POST(request: Request) {
     therapeuticArea,
     market,
     language,
-    tenderType,
+    outputFormat,
+    regionalTenderSpec,
     sectionIds,
     provider = "claude",
     apiKey,
     promptRules,
   } = body;
-  if (!therapeuticArea || !market || !language || !tenderType || !sectionIds?.length) {
+  if (!therapeuticArea || !market || !language || !outputFormat || !sectionIds?.length) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }
 
@@ -56,7 +58,9 @@ export async function POST(request: Request) {
 - Therapeutic area: ${therapeuticArea}
 - Target market: ${market}
 - Language: ${language}
-- Tender type: ${tenderType}
+- Output format: ${outputFormat}${
+    regionalTenderSpec?.trim() ? `\n- Regional tender specification: ${regionalTenderSpec.trim()}` : ""
+  }
 
 Include exactly these sections, in this order, each as a markdown "## " heading:
 ${sectionList}

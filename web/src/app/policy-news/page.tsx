@@ -1,42 +1,42 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { Dropdown } from "@/components/ui/Dropdown";
+import { useState } from "react";
 import { NewsCard } from "@/components/policy-news/NewsCard";
-import { mockPolicyNews } from "@/lib/mock-data/policy-news";
+import { mockPolicyNews, NEWS_AUTHORITIES } from "@/lib/mock-data/policy-news";
 import styles from "./page.module.css";
 
 export default function PolicyNewsPage() {
-  const [region, setRegion] = useState("all");
-
-  const regions = useMemo(
-    () => Array.from(new Set(mockPolicyNews.map((n) => n.region))).sort(),
-    []
-  );
+  const [authority, setAuthority] = useState("All");
 
   const filtered =
-    region === "all" ? mockPolicyNews : mockPolicyNews.filter((n) => n.region === region);
+    authority === "All" ? mockPolicyNews : mockPolicyNews.filter((n) => n.authority === authority);
 
   return (
     <div>
-      <h1 className="pageTitle">Policy News</h1>
-      <p className="pageSub">
-        Regulatory and policy updates relevant to your markets.
-      </p>
+      <h1 className="pageTitle">Policy &amp; Regulatory News</h1>
+      <p className="pageSub">Stay updated with the latest regulatory developments and policy changes.</p>
 
-      <div className={styles.filterBar}>
-        <Dropdown
-          label="Region"
-          value={region}
-          options={[{ label: "All", value: "all" }, ...regions.map((r) => ({ label: r, value: r }))]}
-          onChange={setRegion}
-        />
+      <div className={styles.tabRow} role="tablist" aria-label="Filter by authority">
+        {["All", ...NEWS_AUTHORITIES].map((a) => (
+          <button
+            key={a}
+            type="button"
+            role="tab"
+            aria-selected={authority === a}
+            className={`${styles.tab} ${authority === a ? styles.tabActive : ""}`}
+            onClick={() => setAuthority(a)}
+          >
+            {a}
+          </button>
+        ))}
       </div>
 
       <div className={styles.list}>
-        {filtered.map((item) => (
-          <NewsCard key={item.id} item={item} />
-        ))}
+        {filtered.length === 0 ? (
+          <p className={styles.empty}>No news items for this authority yet.</p>
+        ) : (
+          filtered.map((item) => <NewsCard key={item.id} item={item} />)
+        )}
       </div>
     </div>
   );

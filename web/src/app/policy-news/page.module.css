@@ -1,9 +1,31 @@
-.filterBar {
-  margin-bottom: 18px;
+.tabRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+.tab {
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--ink-muted);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.tabActive {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
 }
 .list {
   display: flex;
   flex-direction: column;
   gap: 12px;
   max-width: 760px;
+}
+.empty {
+  font-size: 12.5px;
+  color: var(--ink-faint);
 }

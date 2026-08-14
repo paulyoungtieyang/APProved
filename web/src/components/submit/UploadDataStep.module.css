@@ -1,0 +1,25 @@
+.dropzone {
+  border: 2px dashed var(--border-strong);
+  border-radius: 12px;
+  padding: 32px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  background: var(--surface-2);
+  margin: 16px 0;
+}
+.dzText {
+  color: var(--ink-muted);
+  font-size: 13px;
+  margin: 0;
+}
+.dzHint {
+  color: var(--ink-faint);
+  font-size: 11.5px;
+  margin: 4px 0 0;
+}
+.hiddenInput {
+  display: none;
+}

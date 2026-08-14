@@ -22,6 +22,7 @@ export function MaterialTypeCard({
       </span>
       <span className={styles.label}>{material.label}</span>
       <span className={styles.desc}>{material.description}</span>
+      <span className={styles.time}>Est. generation time: {material.estGenerationTime}</span>
     </button>
   );
 }

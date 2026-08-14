@@ -11,7 +11,7 @@ import {
   THERAPEUTIC_AREAS,
   DOSSIER_MARKETS,
   DOSSIER_LANGUAGES,
-  TENDER_TYPES,
+  OUTPUT_FORMATS,
   DOSSIER_SECTIONS,
 } from "@/lib/mock-data/dossier-options";
 import styles from "./page.module.css";
@@ -21,7 +21,8 @@ export default function GlobalValueDossierPage() {
   const [therapeuticArea, setTherapeuticArea] = useState(THERAPEUTIC_AREAS[0]);
   const [market, setMarket] = useState(DOSSIER_MARKETS[0]);
   const [language, setLanguage] = useState(DOSSIER_LANGUAGES[0]);
-  const [tenderType, setTenderType] = useState(TENDER_TYPES[0]);
+  const [outputFormat, setOutputFormat] = useState(OUTPUT_FORMATS[0]);
+  const [regionalTenderSpec, setRegionalTenderSpec] = useState("");
   const [sectionIds, setSectionIds] = useState<string[]>(DOSSIER_SECTIONS.map((s) => s.id));
   const [status, setStatus] = useState<"idle" | "generating" | "done" | "error">("idle");
   const [markdown, setMarkdown] = useState("");
@@ -44,7 +45,8 @@ export default function GlobalValueDossierPage() {
           therapeuticArea,
           market,
           language,
-          tenderType,
+          outputFormat,
+          regionalTenderSpec,
           sectionIds,
           provider: aiSettings.provider,
           apiKey: aiSettings.provider === "openai" ? aiSettings.openaiApiKey : aiSettings.claudeApiKey,
@@ -71,20 +73,25 @@ export default function GlobalValueDossierPage() {
       <div className={styles.mainGrid}>
         <div className={styles.leftCol}>
           <Card>
-            <h3 className={styles.sectionTitle}>Configuration</h3>
+            <h3 className={styles.sectionTitle}>Dossier Configuration</h3>
             <DossierConfigForm
               therapeuticArea={therapeuticArea}
               market={market}
               language={language}
-              tenderType={tenderType}
+              outputFormat={outputFormat}
+              regionalTenderSpec={regionalTenderSpec}
               onTherapeuticAreaChange={setTherapeuticArea}
               onMarketChange={setMarket}
               onLanguageChange={setLanguage}
-              onTenderTypeChange={setTenderType}
+              onOutputFormatChange={setOutputFormat}
+              onRegionalTenderSpecChange={setRegionalTenderSpec}
             />
           </Card>
           <Card>
             <h3 className={styles.sectionTitle}>Dossier Sections</h3>
+            <p className={styles.sectionSub}>
+              AI will generate content for each section based on your configuration
+            </p>
             <DossierSectionList selected={sectionIds} onToggle={toggleSection} />
           </Card>
         </div>
@@ -104,7 +111,7 @@ export default function GlobalValueDossierPage() {
               therapeuticArea={therapeuticArea}
               market={market}
               language={language}
-              tenderType={tenderType}
+              outputFormat={outputFormat}
               markdown={markdown}
             />
           )}

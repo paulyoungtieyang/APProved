@@ -11,16 +11,17 @@ import {
   MATERIAL_TYPES,
   MATERIAL_TONES,
   MATERIAL_AUDIENCES,
-  BRAND_VOICES,
+  FOCUS_AREAS,
 } from "@/lib/mock-data/msl-materials";
 import styles from "./page.module.css";
 
 export default function MslMaterialsPage() {
   const { aiSettings } = useAppState();
   const [materialId, setMaterialId] = useState(MATERIAL_TYPES[0].id);
-  const [tone, setTone] = useState(MATERIAL_TONES[0]);
   const [audience, setAudience] = useState(MATERIAL_AUDIENCES[0]);
-  const [brandVoice, setBrandVoice] = useState(BRAND_VOICES[0]);
+  const [focusArea, setFocusArea] = useState(FOCUS_AREAS[0]);
+  const [tone, setTone] = useState(MATERIAL_TONES[0]);
+  const [keyMessages, setKeyMessages] = useState("");
   const [status, setStatus] = useState<"idle" | "generating" | "done" | "error">("idle");
   const [markdown, setMarkdown] = useState("");
   const [error, setError] = useState("");
@@ -38,7 +39,8 @@ export default function MslMaterialsPage() {
           materialId,
           tone,
           audience,
-          brandVoice,
+          focusArea,
+          keyMessages,
           provider: aiSettings.provider,
           apiKey: aiSettings.provider === "openai" ? aiSettings.openaiApiKey : aiSettings.claudeApiKey,
           promptRules: aiSettings.materialPromptRules,
@@ -63,7 +65,7 @@ export default function MslMaterialsPage() {
     <div>
       <h1 className="pageTitle">MSL Materials</h1>
       <p className="pageSub">
-        Generate scientific materials for Medical Science Liaison field use.
+        Generate scientific communication materials for Medical Science Liaisons.
       </p>
 
       <div className={`grid ${styles.materialsGrid}`}>
@@ -79,18 +81,25 @@ export default function MslMaterialsPage() {
 
       <div className={styles.mainGrid}>
         <Card>
-          <h3 className={styles.sectionTitle}>Configuration</h3>
+          <h3 className={styles.sectionTitle}>Content Configuration</h3>
           <MaterialConfigForm
-            tone={tone}
             audience={audience}
-            brandVoice={brandVoice}
-            onToneChange={setTone}
+            focusArea={focusArea}
+            tone={tone}
+            keyMessages={keyMessages}
             onAudienceChange={setAudience}
-            onBrandVoiceChange={setBrandVoice}
+            onFocusAreaChange={setFocusArea}
+            onToneChange={setTone}
+            onKeyMessagesChange={setKeyMessages}
           />
           <div className={styles.generateRow}>
-            <Button type="button" onClick={generate} disabled={status === "generating"}>
-              {status === "generating" ? "Generating…" : `Generate ${material.label}`}
+            <Button
+              type="button"
+              onClick={generate}
+              disabled={status === "generating"}
+              className={styles.generateBtn}
+            >
+              {status === "generating" ? "Generating…" : "Generate Material with AI"}
             </Button>
           </div>
           {status === "error" && <p className={styles.errorText}>{error}</p>}
@@ -101,7 +110,7 @@ export default function MslMaterialsPage() {
             material={material}
             tone={tone}
             audience={audience}
-            brandVoice={brandVoice}
+            focusArea={focusArea}
             markdown={markdown}
           />
         )}

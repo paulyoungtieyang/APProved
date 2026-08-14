@@ -9,7 +9,8 @@ interface GenerateMaterialRequest {
   materialId: string;
   tone: string;
   audience: string;
-  brandVoice: string;
+  focusArea: string;
+  keyMessages?: string;
   provider?: "claude" | "openai";
   apiKey?: string;
   promptRules?: string;
@@ -23,9 +24,18 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
-  const { materialId, tone, audience, brandVoice, provider = "claude", apiKey, promptRules } = body;
+  const {
+    materialId,
+    tone,
+    audience,
+    focusArea,
+    keyMessages,
+    provider = "claude",
+    apiKey,
+    promptRules,
+  } = body;
   const material = MATERIAL_TYPES.find((m) => m.id === materialId);
-  if (!material || !tone || !audience || !brandVoice) {
+  if (!material || !tone || !audience || !focusArea) {
     return NextResponse.json({ error: "Missing or invalid required fields" }, { status: 400 });
   }
 
@@ -39,7 +49,7 @@ export async function POST(request: Request) {
 
 - Tone: ${tone}
 - Audience: ${audience}
-- Brand voice: ${brandVoice}
+- Focus area: ${focusArea}${keyMessages?.trim() ? `\n- Key messages to emphasize: ${keyMessages.trim()}` : ""}
 
 Write realistic, plausible draft content in markdown appropriate for this material type — use section headings, and bullet points or Q&A pairs where that fits the format. Keep it focused and field-usable, not a full slide deck script — aim for the equivalent of one page of content. Do not include any content outside the material itself (no preamble, no closing remarks).`;
 

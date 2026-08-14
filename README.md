@@ -27,7 +27,27 @@ continues from here.
 | Folder | What's in it |
 |---|---|
 | `*.py`, `data/` | The workflow itself and its test fixtures — see [Code layout](#code-layout) below |
-| `demo/` | The clickable, self-contained demo — see [Clickable demo](#clickable-demo) |
+| `demo/` | The clickable, self-contained single-page demo — see [Clickable demo](#clickable-demo) |
+| `web/` | A full Next.js UI prototype of the broader APProved platform (10 modules, real AI generation on two of them) — see [Web app](#web-app) |
+
+## Web app
+
+`web/` is a separate, self-contained Next.js app — a much larger UI
+prototype covering the full platform vision (Dashboard, Upload, Regulations,
+Policy News, Global Value Dossier, MSL Materials, Document Library,
+Resources, Submit, Settings), not just the EU MDR pipeline this root README
+describes. Two of its modules call a real LLM (Claude or OpenAI); the rest
+are a realistic, fully clickable UI prototype with mock data. It does not
+call the Python workflow above — it's independent.
+
+```bash
+cd web
+npm install
+npm run dev
+```
+
+See [`web/README.md`](web/README.md) for the full quick start, including
+how to enable real AI generation.
 
 ## Clickable demo
 

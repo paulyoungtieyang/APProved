@@ -19,13 +19,29 @@ export default function MslMaterialsPage() {
   const [tone, setTone] = useState(MATERIAL_TONES[0]);
   const [audience, setAudience] = useState(MATERIAL_AUDIENCES[0]);
   const [brandVoice, setBrandVoice] = useState(BRAND_VOICES[0]);
-  const [status, setStatus] = useState<"idle" | "generating" | "done">("idle");
+  const [status, setStatus] = useState<"idle" | "generating" | "done" | "error">("idle");
+  const [markdown, setMarkdown] = useState("");
+  const [error, setError] = useState("");
 
   const material = MATERIAL_TYPES.find((m) => m.id === materialId)!;
 
-  function generate() {
+  async function generate() {
     setStatus("generating");
-    window.setTimeout(() => setStatus("done"), 1200);
+    setError("");
+    try {
+      const res = await fetch("/api/generate-material", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ materialId, tone, audience, brandVoice }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Generation failed");
+      setMarkdown(data.markdown);
+      setStatus("done");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Generation failed");
+      setStatus("error");
+    }
   }
 
   function selectMaterial(id: string) {
@@ -67,6 +83,7 @@ export default function MslMaterialsPage() {
               {status === "generating" ? "Generating…" : `Generate ${material.label}`}
             </Button>
           </div>
+          {status === "error" && <p className={styles.errorText}>{error}</p>}
         </Card>
 
         {status === "done" && (
@@ -75,6 +92,7 @@ export default function MslMaterialsPage() {
             tone={tone}
             audience={audience}
             brandVoice={brandVoice}
+            markdown={markdown}
           />
         )}
       </div>

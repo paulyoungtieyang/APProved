@@ -21,7 +21,9 @@ export default function GlobalValueDossierPage() {
   const [language, setLanguage] = useState(DOSSIER_LANGUAGES[0]);
   const [tenderType, setTenderType] = useState(TENDER_TYPES[0]);
   const [sectionIds, setSectionIds] = useState<string[]>(DOSSIER_SECTIONS.map((s) => s.id));
-  const [status, setStatus] = useState<"idle" | "generating" | "done">("idle");
+  const [status, setStatus] = useState<"idle" | "generating" | "done" | "error">("idle");
+  const [markdown, setMarkdown] = useState("");
+  const [error, setError] = useState("");
 
   function toggleSection(id: string) {
     setSectionIds((prev) =>
@@ -29,9 +31,23 @@ export default function GlobalValueDossierPage() {
     );
   }
 
-  function generate() {
+  async function generate() {
     setStatus("generating");
-    window.setTimeout(() => setStatus("done"), 1400);
+    setError("");
+    try {
+      const res = await fetch("/api/generate-dossier", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ therapeuticArea, market, language, tenderType, sectionIds }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Generation failed");
+      setMarkdown(data.markdown);
+      setStatus("done");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Generation failed");
+      setStatus("error");
+    }
   }
 
   return (
@@ -70,13 +86,15 @@ export default function GlobalValueDossierPage() {
             {status === "generating" ? "Generating…" : "Generate Dossier"}
           </Button>
 
+          {status === "error" && <p className={styles.errorText}>{error}</p>}
+
           {status === "done" && (
             <GeneratedDossierPreview
               therapeuticArea={therapeuticArea}
               market={market}
               language={language}
               tenderType={tenderType}
-              sectionIds={sectionIds}
+              markdown={markdown}
             />
           )}
         </div>

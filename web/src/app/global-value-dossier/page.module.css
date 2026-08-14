@@ -21,6 +21,11 @@
   font-size: 15px;
   margin: 0 0 12px;
 }
+.errorText {
+  color: var(--bad);
+  font-size: 12.5px;
+  margin: 0;
+}
 
 @media (max-width: 900px) {
   .mainGrid {

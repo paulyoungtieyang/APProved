@@ -2,6 +2,8 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+The Global Value Dossier and MSL Materials "Generate" buttons call the real Claude API. Copy `.env.example` to `.env.local` and set `ANTHROPIC_API_KEY` before using them — without it those two routes return a clear "not configured" error, but the rest of the app works normally.
+
 First, run the development server:
 
 ```bash

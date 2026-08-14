@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useAppState } from "@/lib/state/AppStateProvider";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { DossierConfigForm } from "@/components/global-value-dossier/DossierConfigForm";
@@ -16,6 +17,7 @@ import {
 import styles from "./page.module.css";
 
 export default function GlobalValueDossierPage() {
+  const { aiSettings } = useAppState();
   const [therapeuticArea, setTherapeuticArea] = useState(THERAPEUTIC_AREAS[0]);
   const [market, setMarket] = useState(DOSSIER_MARKETS[0]);
   const [language, setLanguage] = useState(DOSSIER_LANGUAGES[0]);
@@ -38,7 +40,16 @@ export default function GlobalValueDossierPage() {
       const res = await fetch("/api/generate-dossier", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ therapeuticArea, market, language, tenderType, sectionIds }),
+        body: JSON.stringify({
+          therapeuticArea,
+          market,
+          language,
+          tenderType,
+          sectionIds,
+          provider: aiSettings.provider,
+          apiKey: aiSettings.provider === "openai" ? aiSettings.openaiApiKey : aiSettings.claudeApiKey,
+          promptRules: aiSettings.dossierPromptRules,
+        }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Generation failed");

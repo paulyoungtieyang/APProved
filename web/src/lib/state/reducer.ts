@@ -4,6 +4,7 @@ import type {
   SourceFile,
   SourceFileStatus,
   ActivityEntry,
+  AiSettings,
 } from "./types";
 
 export type Action =
@@ -14,6 +15,7 @@ export type Action =
   | { type: "DISMISS_CHECKLIST" }
   | { type: "COMPLETE_CHECKLIST_ITEM"; itemId: string }
   | { type: "LOG_ACTIVITY"; entry: ActivityEntry }
+  | { type: "UPDATE_AI_SETTINGS"; settings: Partial<AiSettings> }
   | { type: "HYDRATE"; state: AppState };
 
 function logActivity(state: AppState, label: string): AppState["activity"] {
@@ -100,6 +102,9 @@ export function appReducer(state: AppState, action: Action): AppState {
 
     case "LOG_ACTIVITY":
       return { ...state, activity: [action.entry, ...state.activity] };
+
+    case "UPDATE_AI_SETTINGS":
+      return { ...state, aiSettings: { ...state.aiSettings, ...action.settings } };
 
     case "HYDRATE":
       return action.state;

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useAppState } from "@/lib/state/AppStateProvider";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { MaterialTypeCard } from "@/components/msl-materials/MaterialTypeCard";
@@ -15,6 +16,7 @@ import {
 import styles from "./page.module.css";
 
 export default function MslMaterialsPage() {
+  const { aiSettings } = useAppState();
   const [materialId, setMaterialId] = useState(MATERIAL_TYPES[0].id);
   const [tone, setTone] = useState(MATERIAL_TONES[0]);
   const [audience, setAudience] = useState(MATERIAL_AUDIENCES[0]);
@@ -32,7 +34,15 @@ export default function MslMaterialsPage() {
       const res = await fetch("/api/generate-material", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ materialId, tone, audience, brandVoice }),
+        body: JSON.stringify({
+          materialId,
+          tone,
+          audience,
+          brandVoice,
+          provider: aiSettings.provider,
+          apiKey: aiSettings.provider === "openai" ? aiSettings.openaiApiKey : aiSettings.claudeApiKey,
+          promptRules: aiSettings.materialPromptRules,
+        }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Generation failed");

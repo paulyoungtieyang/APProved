@@ -89,6 +89,16 @@ export interface ActivityEntry {
   timestamp: string; // ISO
 }
 
+export type AiProvider = "claude" | "openai";
+
+export interface AiSettings {
+  provider: AiProvider;
+  claudeApiKey: string;
+  openaiApiKey: string;
+  dossierPromptRules: string;
+  materialPromptRules: string;
+}
+
 export interface AppState {
   organization: Organization;
   project: Project;
@@ -98,4 +108,5 @@ export interface AppState {
   kpis: KpiMetric[];
   activity: ActivityEntry[];
   checklistDismissed: boolean;
+  aiSettings: AiSettings;
 }

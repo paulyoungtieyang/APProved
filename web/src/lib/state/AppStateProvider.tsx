@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useMemo, useReducer, useState } from "react";
 import type { ReactNode } from "react";
 import { appReducer } from "./reducer";
-import type { AppState, RegulatoryTrack, SourceFile } from "./types";
+import type { AiSettings, AppState, RegulatoryTrack, SourceFile } from "./types";
 import { mockOrganization, mockProject } from "../mock-data/organization";
 import { mockFrameworks } from "../mock-data/regulatory-frameworks";
 import { mockDocuments } from "../mock-data/documents";
@@ -22,6 +22,13 @@ const initialState: AppState = {
   kpis: mockKpis,
   activity: mockActivity,
   checklistDismissed: false,
+  aiSettings: {
+    provider: "claude",
+    claudeApiKey: "",
+    openaiApiKey: "",
+    dossierPromptRules: "",
+    materialPromptRules: "",
+  },
 };
 
 function loadPersisted(): AppState | null {
@@ -44,6 +51,7 @@ interface Actions {
   startUpload(file: Omit<SourceFile, "id" | "status" | "uploadedAt">): void;
   selectFramework(frameworkId: string): void;
   dismissChecklist(): void;
+  updateAiSettings(settings: Partial<AiSettings>): void;
 }
 const ActionsContext = createContext<Actions | null>(null);
 
@@ -104,6 +112,9 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       },
       dismissChecklist() {
         dispatch({ type: "DISMISS_CHECKLIST" });
+      },
+      updateAiSettings(settings) {
+        dispatch({ type: "UPDATE_AI_SETTINGS", settings });
       },
     }),
     []

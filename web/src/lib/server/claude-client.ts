@@ -1,14 +1,12 @@
 import "server-only";
 import Anthropic from "@anthropic-ai/sdk";
 
-let client: Anthropic | null = null;
-
-export function getClaudeClient(): Anthropic {
-  if (!process.env.ANTHROPIC_API_KEY) {
-    throw new Error("ANTHROPIC_API_KEY is not set");
+export function getClaudeClient(apiKey?: string): Anthropic {
+  const key = apiKey?.trim() || process.env.ANTHROPIC_API_KEY;
+  if (!key) {
+    throw new Error(
+      "Claude API key is not configured — set ANTHROPIC_API_KEY on the server or add a key in Settings"
+    );
   }
-  if (!client) {
-    client = new Anthropic();
-  }
-  return client;
+  return new Anthropic({ apiKey: key });
 }
